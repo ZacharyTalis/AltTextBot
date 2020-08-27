@@ -29,7 +29,7 @@ public class AltTextBot {
 
         ///// Set all public commands /////
         final Command COMMAND_HELP = new Command("!atbhelp",
-                "Get all of the commands from AltTextBot.", publicCommands);
+                "Get all commands from AltTextBot in a direct message.", publicCommands);
         final Command COMMAND_PING = new Command("!atbping",
                 "Check to see if AltTextBot is alive.", publicCommands);
         final Command COMMAND_ALT = new Command("!alt",
