@@ -72,7 +72,7 @@ public class GuildRoleUpdateHandler extends PacketHandler {
                         for (RoleChangeNameListener listener : listeners) {
                             try {
                                 listener.onRoleChangeName(api, role, oldName);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in RoleChangeNameListener!", t);
                             }
                         }
@@ -94,7 +94,7 @@ public class GuildRoleUpdateHandler extends PacketHandler {
                         for (RoleChangePermissionsListener listener : listeners) {
                             try {
                                 listener.onRoleChangePermissions(api, role, oldPermissions);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in RoleChangePermissionsListener!", t);
                             }
                         }
@@ -115,7 +115,7 @@ public class GuildRoleUpdateHandler extends PacketHandler {
                         for (RoleChangeColorListener listener : listeners) {
                             try {
                                 listener.onRoleChangeColor(api, role, oldColor);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in RoleChangeColorListener!", t);
                             }
                         }
@@ -134,7 +134,7 @@ public class GuildRoleUpdateHandler extends PacketHandler {
                         for (RoleChangeHoistListener listener : listeners) {
                             try {
                                 listener.onRoleChangeHoist(api, role, !role.getHoist());
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in RoleChangeHoistListener!", t);
                             }
                         }
@@ -156,7 +156,7 @@ public class GuildRoleUpdateHandler extends PacketHandler {
                             for (RoleChangePositionListener listener : listeners) {
                                 try {
                                     listener.onRoleChangePosition(api, role, oldPosition);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in RoleChangePositionListener!", t);
                                 }
                             }

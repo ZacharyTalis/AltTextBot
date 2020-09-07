@@ -66,7 +66,7 @@ public class GuildRoleCreateHandler extends PacketHandler {
                     for (RoleCreateListener listener : listeners) {
                         try {
                             listener.onRoleCreate(api, role);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in RoleCreateListener!", t);
                         }
                     }

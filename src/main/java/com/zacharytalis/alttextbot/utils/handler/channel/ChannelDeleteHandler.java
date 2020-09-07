@@ -81,7 +81,7 @@ public class ChannelDeleteHandler extends PacketHandler {
                     for (ChannelDeleteListener listener : listeners) {
                         try {
                             listener.onChannelDelete(api, channel);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in ChannelDeleteListener!", t);
                         }
                     }
@@ -110,7 +110,7 @@ public class ChannelDeleteHandler extends PacketHandler {
                     for (VoiceChannelDeleteListener listener : listeners) {
                         try {
                             listener.onVoiceChannelDelete(api, channel);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in VoiceChannelDeleteListener!", t);
                         }
                     }

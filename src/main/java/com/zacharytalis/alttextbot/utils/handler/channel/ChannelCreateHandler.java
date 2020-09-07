@@ -98,7 +98,7 @@ public class ChannelCreateHandler extends PacketHandler {
                     for (ChannelCreateListener listener : listeners) {
                         try {
                             listener.onChannelCreate(api, channel);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in ChannelCreateListener!", t);
                         }
                     }
@@ -126,7 +126,7 @@ public class ChannelCreateHandler extends PacketHandler {
                     for (VoiceChannelCreateListener listener : listeners) {
                         try {
                             listener.onVoiceChannelCreate(api, channel);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in VoiceChannelCreateListener!", t);
                         }
                     }

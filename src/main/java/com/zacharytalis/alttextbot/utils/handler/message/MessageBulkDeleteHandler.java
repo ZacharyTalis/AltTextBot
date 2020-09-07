@@ -65,7 +65,7 @@ public class MessageBulkDeleteHandler extends PacketHandler {
                         for (MessageDeleteListener listener : listeners) {
                             try {
                                 listener.onMessageDelete(api, message);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in MessageDeleteListener!", t);
                             }
                         }

@@ -93,7 +93,7 @@ public class MessageReactionAddHandler extends PacketHandler {
                             for (ReactionAddListener listener : listeners) {
                                 try {
                                     listener.onReactionAdd(api, reactionFinal, user);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in ReactionAddListener!", t);
                                 }
                             }

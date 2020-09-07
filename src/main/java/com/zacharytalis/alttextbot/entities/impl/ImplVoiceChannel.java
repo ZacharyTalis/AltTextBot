@@ -22,6 +22,10 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.zacharytalis.alttextbot.ImplDiscordAPI;
+import com.zacharytalis.alttextbot.entities.InviteBuilder;
+import com.zacharytalis.alttextbot.entities.Server;
+import com.zacharytalis.alttextbot.entities.User;
+import com.zacharytalis.alttextbot.entities.VoiceChannel;
 import com.zacharytalis.alttextbot.entities.permissions.Permissions;
 import com.zacharytalis.alttextbot.entities.permissions.Role;
 import com.zacharytalis.alttextbot.entities.permissions.impl.ImplPermissions;
@@ -31,10 +35,6 @@ import com.zacharytalis.alttextbot.listener.voicechannel.VoiceChannelChangePosit
 import com.zacharytalis.alttextbot.listener.voicechannel.VoiceChannelDeleteListener;
 import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import com.zacharytalis.alttextbot.utils.SnowflakeUtil;
-import com.zacharytalis.alttextbot.entities.InviteBuilder;
-import com.zacharytalis.alttextbot.entities.Server;
-import com.zacharytalis.alttextbot.entities.User;
-import com.zacharytalis.alttextbot.entities.VoiceChannel;
 import com.zacharytalis.alttextbot.utils.ratelimits.RateLimitType;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -159,7 +159,7 @@ public class ImplVoiceChannel implements VoiceChannel {
                             for (VoiceChannelDeleteListener listener : listeners) {
                                 try {
                                     listener.onVoiceChannelDelete(api, ImplVoiceChannel.this);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in VoiceChannelDeleteListener!", t);
                                 }
                             }
@@ -307,7 +307,7 @@ public class ImplVoiceChannel implements VoiceChannel {
                                 for (VoiceChannelChangeNameListener listener : listeners) {
                                     try {
                                         listener.onVoiceChannelChangeName(api, ImplVoiceChannel.this, oldName);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in VoiceChannelChangeNameListener!", t);
                                     }
                                 }
@@ -329,7 +329,7 @@ public class ImplVoiceChannel implements VoiceChannel {
                                 for (VoiceChannelChangePositionListener listener : listeners) {
                                     try {
                                         listener.onVoiceChannelChangePosition(api, ImplVoiceChannel.this, oldPosition);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in VoiceChannelChangePositionListener!", t);
                                     }
                                 }

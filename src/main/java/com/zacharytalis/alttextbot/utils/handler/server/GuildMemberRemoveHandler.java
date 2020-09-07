@@ -64,7 +64,7 @@ public class GuildMemberRemoveHandler extends PacketHandler {
                         for (ServerMemberRemoveListener listener : listeners) {
                             try {
                                 listener.onServerMemberRemove(api, user, server);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ServerMemberRemoveListener!", t);
                             }
                         }

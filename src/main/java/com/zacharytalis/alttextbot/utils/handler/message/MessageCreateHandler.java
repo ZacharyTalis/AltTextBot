@@ -64,8 +64,8 @@ public class MessageCreateHandler extends PacketHandler {
                     for (MessageCreateListener listener : listeners) {
                         try {
                             listener.onMessageCreate(api, message);
-                        } catch (Throwable t) {
-                            logger.warn("Uncaught exception in MessageCreateListener!", t);
+                        } catch (Exception t) {
+                            logger.error("Uncaught exception in MessageCreateListener!", t);
                         }
                     }
                 }

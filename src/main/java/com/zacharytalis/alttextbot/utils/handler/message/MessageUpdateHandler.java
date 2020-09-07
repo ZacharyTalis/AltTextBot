@@ -68,7 +68,7 @@ public class MessageUpdateHandler extends PacketHandler {
                     for (MessageEditListener listener : listeners) {
                         try {
                             listener.onMessageEdit(api, message, oldContent);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in MessageEditListener!", t);
                         }
                     }

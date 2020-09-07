@@ -22,8 +22,6 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.zacharytalis.alttextbot.ImplDiscordAPI;
-import com.zacharytalis.alttextbot.listener.role.*;
-import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import com.zacharytalis.alttextbot.entities.Channel;
 import com.zacharytalis.alttextbot.entities.Server;
 import com.zacharytalis.alttextbot.entities.User;
@@ -31,6 +29,8 @@ import com.zacharytalis.alttextbot.entities.VoiceChannel;
 import com.zacharytalis.alttextbot.entities.impl.ImplServer;
 import com.zacharytalis.alttextbot.entities.permissions.Permissions;
 import com.zacharytalis.alttextbot.entities.permissions.Role;
+import com.zacharytalis.alttextbot.listener.role.*;
+import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import com.zacharytalis.alttextbot.utils.ratelimits.RateLimitType;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -256,7 +256,7 @@ public class ImplRole implements Role {
                                 for (RoleChangePermissionsListener listener : listeners) {
                                     try {
                                         listener.onRoleChangePermissions(api, ImplRole.this, oldPermissions);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in RoleChangePermissionsListener!", t);
                                     }
                                 }
@@ -278,7 +278,7 @@ public class ImplRole implements Role {
                                 for (RoleChangeNameListener listener : listeners) {
                                     try {
                                         listener.onRoleChangeName(api, ImplRole.this, oldName);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in RoleChangeNameListener!", t);
                                     }
                                 }
@@ -301,7 +301,7 @@ public class ImplRole implements Role {
                                 for (RoleChangeColorListener listener : listeners) {
                                     try {
                                         listener.onRoleChangeColor(api, ImplRole.this, oldColor);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in RoleChangeColorListener!", t);
                                     }
                                 }
@@ -323,7 +323,7 @@ public class ImplRole implements Role {
                                 for (RoleChangeHoistListener listener : listeners) {
                                     try {
                                         listener.onRoleChangeHoist(api, ImplRole.this, !ImplRole.this.hoist);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in RoleChangeHoistListener!", t);
                                     }
                                 }
@@ -344,7 +344,7 @@ public class ImplRole implements Role {
                                 for (RoleChangeManagedListener listener : listeners) {
                                     try {
                                         listener.onRoleChangeManaged(api, ImplRole.this, !ImplRole.this.managed);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in RoleChangeManagedListener!", t);
                                     }
                                 }
@@ -365,7 +365,7 @@ public class ImplRole implements Role {
                                 for (RoleChangeMentionableListener listener : listeners) {
                                     try {
                                         listener.onRoleChangeMentionable(api, ImplRole.this, !ImplRole.this.mentionable);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in RoleChangeMentionableListener!", t);
                                     }
                                 }
@@ -399,7 +399,7 @@ public class ImplRole implements Role {
                             for (RoleDeleteListener listener : listeners) {
                                 try {
                                     listener.onRoleDelete(api, ImplRole.this);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in RoleDeleteListener!", t);
                                 }
                             }

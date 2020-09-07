@@ -64,7 +64,7 @@ public class GuildMemberAddHandler extends PacketHandler {
                         for (ServerMemberAddListener listener : listeners) {
                             try {
                                 listener.onServerMemberAdd(api, user, server);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ServerMemberAddListener!", t);
                             }
                         }

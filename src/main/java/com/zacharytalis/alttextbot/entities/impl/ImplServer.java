@@ -18,6 +18,33 @@
  */
 package com.zacharytalis.alttextbot.entities.impl;
 
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.zacharytalis.alttextbot.ImplDiscordAPI;
+import com.zacharytalis.alttextbot.Javacord;
+import com.zacharytalis.alttextbot.entities.*;
+import com.zacharytalis.alttextbot.entities.permissions.Ban;
+import com.zacharytalis.alttextbot.entities.permissions.Role;
+import com.zacharytalis.alttextbot.entities.permissions.impl.ImplBan;
+import com.zacharytalis.alttextbot.entities.permissions.impl.ImplRole;
+import com.zacharytalis.alttextbot.listener.channel.ChannelCreateListener;
+import com.zacharytalis.alttextbot.listener.role.RoleCreateListener;
+import com.zacharytalis.alttextbot.listener.server.*;
+import com.zacharytalis.alttextbot.listener.user.UserRoleAddListener;
+import com.zacharytalis.alttextbot.listener.user.UserRoleRemoveListener;
+import com.zacharytalis.alttextbot.listener.voicechannel.VoiceChannelCreateListener;
+import com.zacharytalis.alttextbot.utils.LoggerUtil;
+import com.zacharytalis.alttextbot.utils.SnowflakeUtil;
+import com.zacharytalis.alttextbot.utils.ratelimits.RateLimitType;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+
+import javax.net.ssl.HttpsURLConnection;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,47 +58,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
-
-import com.zacharytalis.alttextbot.ImplDiscordAPI;
-import com.zacharytalis.alttextbot.Javacord;
-import com.zacharytalis.alttextbot.entities.permissions.Ban;
-import com.zacharytalis.alttextbot.entities.permissions.Role;
-import com.zacharytalis.alttextbot.entities.permissions.impl.ImplBan;
-import com.zacharytalis.alttextbot.entities.permissions.impl.ImplRole;
-import com.zacharytalis.alttextbot.listener.channel.ChannelCreateListener;
-import com.zacharytalis.alttextbot.listener.role.RoleCreateListener;
-import com.zacharytalis.alttextbot.listener.user.UserRoleAddListener;
-import com.zacharytalis.alttextbot.listener.user.UserRoleRemoveListener;
-import com.zacharytalis.alttextbot.listener.voicechannel.VoiceChannelCreateListener;
-import com.zacharytalis.alttextbot.utils.LoggerUtil;
-import com.zacharytalis.alttextbot.utils.SnowflakeUtil;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-
-import com.zacharytalis.alttextbot.entities.Channel;
-import com.zacharytalis.alttextbot.entities.CustomEmoji;
-import com.zacharytalis.alttextbot.entities.Invite;
-import com.zacharytalis.alttextbot.entities.Region;
-import com.zacharytalis.alttextbot.entities.Server;
-import com.zacharytalis.alttextbot.entities.User;
-import com.zacharytalis.alttextbot.entities.UserStatus;
-import com.zacharytalis.alttextbot.entities.VoiceChannel;
-import com.zacharytalis.alttextbot.listener.server.ServerChangeNameListener;
-import com.zacharytalis.alttextbot.listener.server.ServerLeaveListener;
-import com.zacharytalis.alttextbot.listener.server.ServerMemberBanListener;
-import com.zacharytalis.alttextbot.listener.server.ServerMemberRemoveListener;
-import com.zacharytalis.alttextbot.listener.server.ServerMemberUnbanListener;
-import com.zacharytalis.alttextbot.utils.ratelimits.RateLimitType;
-
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  * The implementation of the server interface.
@@ -239,7 +225,7 @@ public class ImplServer implements Server {
                             for (ServerLeaveListener listener : listeners) {
                                 try {
                                     listener.onServerLeave(api, ImplServer.this);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in ServerLeaveListener!", t);
                                 }
                             }
@@ -273,7 +259,7 @@ public class ImplServer implements Server {
                             for (ServerLeaveListener listener : listeners) {
                                 try {
                                     listener.onServerLeave(api, ImplServer.this);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in ServerLeaveListener!", t);
                                 }
                             }
@@ -357,7 +343,7 @@ public class ImplServer implements Server {
                                     for (ChannelCreateListener listener : listeners) {
                                         try {
                                             listener.onChannelCreate(api, channel);
-                                        } catch (Throwable t) {
+                                        } catch (Exception t) {
                                             logger.warn("Uncaught exception in ChannelCreateListener!", t);
                                         }
                                     }
@@ -396,7 +382,7 @@ public class ImplServer implements Server {
                                     for (VoiceChannelCreateListener listener : listeners) {
                                         try {
                                         listener.onVoiceChannelCreate(api, channel);
-                                        } catch (Throwable t) {
+                                        } catch (Exception t) {
                                             logger.warn("Uncaught exception in VoiceChannelCreateListener!", t);
                                         }
                                     }
@@ -481,7 +467,7 @@ public class ImplServer implements Server {
                                     for (UserRoleRemoveListener listener : listeners) {
                                         try {
                                             listener.onUserRoleRemove(api, user, role);
-                                        } catch (Throwable t) {
+                                        } catch (Exception t) {
                                             logger.warn("Uncaught exception in UserRoleRemoveListener!", t);
                                         }
                                     }
@@ -501,7 +487,7 @@ public class ImplServer implements Server {
                                     for (UserRoleAddListener listener : listeners) {
                                         try {
                                             listener.onUserRoleAdd(api, user, role);
-                                        } catch (Throwable t) {
+                                        } catch (Exception t) {
                                             logger.warn("Uncaught exception in UserRoleAddListener!", t);
                                         }
                                     }
@@ -559,7 +545,7 @@ public class ImplServer implements Server {
                             for (ServerMemberBanListener listener : listeners) {
                                 try {
                                     listener.onServerMemberBan(api, user, ImplServer.this);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in ServerMemberBanListener!", t);
                                 }
                             }
@@ -593,7 +579,7 @@ public class ImplServer implements Server {
                             for (ServerMemberUnbanListener listener : listeners) {
                                 try {
                                     listener.onServerMemberUnban(api, userId, ImplServer.this);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in ServerMemberUnbanListener!", t);
                                 }
                             }
@@ -669,7 +655,7 @@ public class ImplServer implements Server {
                             for (ServerMemberRemoveListener listener : listeners) {
                                 try {
                                     listener.onServerMemberRemove(api, user, ImplServer.this);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in ServerMemberRemoveListener!", t);
                                 }
                             }
@@ -709,7 +695,7 @@ public class ImplServer implements Server {
                             for (RoleCreateListener listener : listeners) {
                                 try {
                                     listener.onRoleCreate(api, role);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in RoleCreateListener!", t);
                                 }
                             }
@@ -783,7 +769,7 @@ public class ImplServer implements Server {
                                 for (ServerChangeNameListener listener : listeners) {
                                     try {
                                         listener.onServerChangeName(api, ImplServer.this, oldName);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in ServerChangeNameListener!", t);
                                     }
                                 }

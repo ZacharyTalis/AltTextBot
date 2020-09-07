@@ -63,7 +63,7 @@ public class GuildBanRemoveHandler extends PacketHandler {
                         for (ServerMemberUnbanListener listener : listeners) {
                             try {
                                 listener.onServerMemberUnban(api, user.getId(), server);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ServerMemberUnbanListener!", t);
                             }
                         }

@@ -62,7 +62,7 @@ public class GuildDeleteHandler extends PacketHandler {
                     for (ServerLeaveListener listener : listeners) {
                         try {
                             listener.onServerLeave(api, server);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in ServerLeaveListener!", t);
                         }
                     }

@@ -18,13 +18,6 @@
  */
 package com.zacharytalis.alttextbot.utils.handler.voice;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-
 import com.zacharytalis.alttextbot.ImplDiscordAPI;
 import com.zacharytalis.alttextbot.entities.User;
 import com.zacharytalis.alttextbot.entities.impl.ImplUser;
@@ -33,6 +26,12 @@ import com.zacharytalis.alttextbot.listener.voice.UserJoinVoiceChannelListener;
 import com.zacharytalis.alttextbot.listener.voice.UserLeaveVoiceChannelListener;
 import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import com.zacharytalis.alttextbot.utils.PacketHandler;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Handles the voice state update packet.
@@ -89,7 +88,7 @@ public class VoiceStateUpdateHandler extends PacketHandler {
                         for (UserJoinVoiceChannelListener listener : listeners) {
                             try {
                                 listener.onUserJoinVoiceChannel(api, userPassed, channel);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in UserJoinVoiceChannelListener!", t);
                             }
                         }
@@ -110,7 +109,7 @@ public class VoiceStateUpdateHandler extends PacketHandler {
                         for (UserLeaveVoiceChannelListener listener : listeners) {
                             try {
                                 listener.onUserLeaveVoiceChannel(api, userPassed);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in UserLeaveVoiceChannelListener!", t);
                             }
                         }

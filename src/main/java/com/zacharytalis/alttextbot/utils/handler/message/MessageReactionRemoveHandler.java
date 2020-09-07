@@ -93,7 +93,7 @@ public class MessageReactionRemoveHandler extends PacketHandler {
                             for (ReactionRemoveListener listener : listeners) {
                                 try {
                                     listener.onReactionRemove(api, reactionFinal, user);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in ReactionRemoveListener!", t);
                                 }
                             }

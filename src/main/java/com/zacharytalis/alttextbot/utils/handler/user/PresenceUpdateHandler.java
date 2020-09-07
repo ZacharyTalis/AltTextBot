@@ -91,7 +91,7 @@ public class PresenceUpdateHandler extends PacketHandler {
                         for (UserChangeStatusListener listener : listeners) {
                             try {
                                 listener.onUserChangeStatus(api, user, oldStatus);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in UserChangeStatusListener!", t);
                             }
                         }
@@ -114,7 +114,7 @@ public class PresenceUpdateHandler extends PacketHandler {
                             for (UserChangeNameListener listener : listeners) {
                                 try {
                                     listener.onUserChangeName(api, user, oldName);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in UserChangeNameListener!", t);
                                 }
                             }
@@ -144,7 +144,7 @@ public class PresenceUpdateHandler extends PacketHandler {
                     for (UserChangeGameListener listener : listeners) {
                         try {
                             listener.onUserChangeGame(api, user, oldGame);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in UserChangeGameListener!", t);
                         }
                     }

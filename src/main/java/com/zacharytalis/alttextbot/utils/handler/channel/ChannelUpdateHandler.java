@@ -99,7 +99,7 @@ public class ChannelUpdateHandler extends PacketHandler {
                         for (ChannelChangeNameListener listener : listeners) {
                             try {
                                 listener.onChannelChangeName(api, channel, oldName);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ChannelChangeNameListener!", t);
                             }
                         }
@@ -123,7 +123,7 @@ public class ChannelUpdateHandler extends PacketHandler {
                         for (ChannelChangeTopicListener listener : listeners) {
                             try {
                                 listener.onChannelChangeTopic(api, channel, oldTopic);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ChannelChangeTopicListener!", t);
                             }
                         }
@@ -145,7 +145,7 @@ public class ChannelUpdateHandler extends PacketHandler {
                         for (ChannelChangePositionListener listener : listeners) {
                             try {
                                 listener.onChannelChangePosition(api, channel, oldPosition);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ChannelChangePositionListener!", t);
                             }
                         }
@@ -183,7 +183,7 @@ public class ChannelUpdateHandler extends PacketHandler {
                                 for (UserChangeOverwrittenPermissionsListener listener : listeners) {
                                     try {
                                         listener.onUserChangeOverwrittenPermissions(api, user, channel, oldPermissions);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn(
                                                 "Uncaught exception in UserChangeOverwrittenPermissionsListener!", t);
                                     }
@@ -211,7 +211,7 @@ public class ChannelUpdateHandler extends PacketHandler {
                                 for (RoleChangeOverwrittenPermissionsListener listener : listeners) {
                                     try {
                                         listener.onRoleChangeOverwrittenPermissions(api, role, channel, oldPermissions);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn(
                                                 "Uncaught exception in RoleChangeOverwrittenPermissionsListener!", t);
                                     }
@@ -255,7 +255,7 @@ public class ChannelUpdateHandler extends PacketHandler {
                         for (VoiceChannelChangeNameListener listener : listeners) {
                             try {
                                 listener.onVoiceChannelChangeName(api, channel, oldName);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in VoiceChannelChangeNameListener!", t);
                             }
                         }
@@ -277,7 +277,7 @@ public class ChannelUpdateHandler extends PacketHandler {
                         for (VoiceChannelChangePositionListener listener : listeners) {
                             try {
                                 listener.onVoiceChannelChangePosition(api, channel, oldPosition);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in VoiceChannelChangePositionListener!", t);
                             }
                         }
@@ -315,7 +315,7 @@ public class ChannelUpdateHandler extends PacketHandler {
                                 for (UserChangeOverwrittenPermissionsListener listener : listeners) {
                                     try {
                                         listener.onUserChangeOverwrittenPermissions(api, user, channel, oldPermissions);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn(
                                                 "Uncaught exception in UserChangeOverwrittenPermissionsListener!", t);
                                     }
@@ -343,7 +343,7 @@ public class ChannelUpdateHandler extends PacketHandler {
                                 for (RoleChangeOverwrittenPermissionsListener listener : listeners) {
                                     try {
                                      listener.onRoleChangeOverwrittenPermissions(api, role, channel, oldPermissions);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn(
                                                 "Uncaught exception in RoleChangeOverwrittenPermissionsListener!", t);
                                     }

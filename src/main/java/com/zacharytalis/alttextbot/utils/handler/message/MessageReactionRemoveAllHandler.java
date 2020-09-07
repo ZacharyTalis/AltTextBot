@@ -69,7 +69,7 @@ public class MessageReactionRemoveAllHandler extends PacketHandler {
                     for (ReactionRemoveAllListener listener : listeners) {
                         try {
                             listener.onReactionRemoveAll(api, message, reactions);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in ReactionRemoveAllListener!", t);
                         }
                     }

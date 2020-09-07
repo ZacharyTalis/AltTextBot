@@ -20,8 +20,12 @@ package com.zacharytalis.alttextbot.utils;
 
 import com.google.common.util.concurrent.SettableFuture;
 import com.neovisionaries.ws.client.*;
+import com.zacharytalis.alttextbot.ImplDiscordAPI;
 import com.zacharytalis.alttextbot.utils.handler.ReadyHandler;
 import com.zacharytalis.alttextbot.utils.handler.ResumedHandler;
+import com.zacharytalis.alttextbot.utils.handler.channel.ChannelCreateHandler;
+import com.zacharytalis.alttextbot.utils.handler.channel.ChannelDeleteHandler;
+import com.zacharytalis.alttextbot.utils.handler.channel.ChannelUpdateHandler;
 import com.zacharytalis.alttextbot.utils.handler.message.*;
 import com.zacharytalis.alttextbot.utils.handler.server.*;
 import com.zacharytalis.alttextbot.utils.handler.server.role.GuildRoleCreateHandler;
@@ -30,10 +34,6 @@ import com.zacharytalis.alttextbot.utils.handler.server.role.GuildRoleUpdateHand
 import com.zacharytalis.alttextbot.utils.handler.user.PresenceUpdateHandler;
 import com.zacharytalis.alttextbot.utils.handler.user.UserGuildSettingsUpdateHandler;
 import com.zacharytalis.alttextbot.utils.handler.voice.VoiceStateUpdateHandler;
-import com.zacharytalis.alttextbot.ImplDiscordAPI;
-import com.zacharytalis.alttextbot.utils.handler.channel.ChannelCreateHandler;
-import com.zacharytalis.alttextbot.utils.handler.channel.ChannelDeleteHandler;
-import com.zacharytalis.alttextbot.utils.handler.channel.ChannelUpdateHandler;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 

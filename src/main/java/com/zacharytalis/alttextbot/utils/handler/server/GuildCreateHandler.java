@@ -72,7 +72,7 @@ public class GuildCreateHandler extends PacketHandler {
                     for (ServerJoinListener listener : listeners) {
                         try {
                             listener.onServerJoin(api, server);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in ServerJoinListener!", t);
                         }
                     }

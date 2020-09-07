@@ -72,7 +72,7 @@ public class GuildMemberUpdateHandler extends PacketHandler {
                                 for (UserChangeNicknameListener listener : listeners) {
                                     try {
                                         listener.onUserChangeNickname(api, server, user, oldNick);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in UserChangeNicknameListener!", t);
                                     }
                                 }
@@ -108,7 +108,7 @@ public class GuildMemberUpdateHandler extends PacketHandler {
                                 for (UserRoleRemoveListener listener : listeners) {
                                     try {
                                         listener.onUserRoleRemove(api, user, role);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in UserRoleRemoveListenerListener!", t);
                                     }
                                 }
@@ -130,7 +130,7 @@ public class GuildMemberUpdateHandler extends PacketHandler {
                                 for (UserRoleAddListener listener : listeners) {
                                     try {
                                         listener.onUserRoleAdd(api, user, role);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in UserRoleAddListener!", t);
                                     }
                                 }
