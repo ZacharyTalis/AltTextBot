@@ -18,8 +18,8 @@
  */
 package com.zacharytalis.alttextbot.entities.message.embed.impl;
 
-import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import com.zacharytalis.alttextbot.entities.message.embed.EmbedFooter;
+import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 

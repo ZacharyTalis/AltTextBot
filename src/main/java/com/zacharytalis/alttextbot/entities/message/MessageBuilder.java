@@ -18,9 +18,9 @@
  */
 package com.zacharytalis.alttextbot.entities.message;
 
-import com.zacharytalis.alttextbot.entities.permissions.Role;
 import com.zacharytalis.alttextbot.entities.Channel;
 import com.zacharytalis.alttextbot.entities.User;
+import com.zacharytalis.alttextbot.entities.permissions.Role;
 
 /**
  * This class helps to build messages with decorations.

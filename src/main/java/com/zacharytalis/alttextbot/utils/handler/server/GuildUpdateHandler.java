@@ -70,7 +70,7 @@ public class GuildUpdateHandler extends PacketHandler {
                         for (ServerChangeNameListener listener : listeners) {
                             try {
                                 listener.onServerChangeName(api, server, oldName);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ServerChangeNameListener!", t);
                             }
                         }
@@ -91,7 +91,7 @@ public class GuildUpdateHandler extends PacketHandler {
                         for (ServerChangeRegionListener listener : listeners) {
                             try {
                                 listener.onServerChangeRegion(api, server, oldRegion);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ServerChangeRegionListener!", t);
                             }
                         }
@@ -112,7 +112,7 @@ public class GuildUpdateHandler extends PacketHandler {
                         for (ServerChangeOwnerListener listener : listeners) {
                             try {
                                 listener.onServerChangeOwner(api, server, oldOwnerId);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ServerChangeOwnerListener!", t);
                             }
                         }
@@ -133,7 +133,7 @@ public class GuildUpdateHandler extends PacketHandler {
                         for (ServerChangeIconListener listener : listeners) {
                             try {
                                 listener.onServerChangeIcon(api, server, oldIcon);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ServerChangeIconListener!", t);
                             }
                         }
@@ -151,7 +151,7 @@ public class GuildUpdateHandler extends PacketHandler {
                         for (ServerChangeIconListener listener : listeners) {
                             try {
                                 listener.onServerChangeIcon(api, server, oldIcon);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ServerChangeIconListener!", t);
                             }
                         }

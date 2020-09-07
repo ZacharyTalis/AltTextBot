@@ -20,12 +20,12 @@ package com.zacharytalis.alttextbot;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.zacharytalis.alttextbot.entities.*;
-import com.zacharytalis.alttextbot.entities.permissions.PermissionState;
-import com.zacharytalis.alttextbot.utils.ThreadPool;
 import com.zacharytalis.alttextbot.entities.message.Message;
+import com.zacharytalis.alttextbot.entities.permissions.PermissionState;
 import com.zacharytalis.alttextbot.entities.permissions.Permissions;
 import com.zacharytalis.alttextbot.entities.permissions.PermissionsBuilder;
 import com.zacharytalis.alttextbot.listener.Listener;
+import com.zacharytalis.alttextbot.utils.ThreadPool;
 import com.zacharytalis.alttextbot.utils.ratelimits.RateLimitManager;
 
 import java.awt.image.BufferedImage;

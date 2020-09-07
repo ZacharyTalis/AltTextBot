@@ -71,7 +71,7 @@ public class GuildRoleDeleteHandler extends PacketHandler {
                     for (RoleDeleteListener listener : listeners) {
                         try {
                             listener.onRoleDelete(api, role);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in RoleDeleteListener!", t);
                         }
                     }

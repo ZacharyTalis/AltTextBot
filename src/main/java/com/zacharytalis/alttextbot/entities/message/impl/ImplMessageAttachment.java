@@ -18,8 +18,8 @@
  */
 package com.zacharytalis.alttextbot.entities.message.impl;
 
-import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import com.zacharytalis.alttextbot.entities.message.MessageAttachment;
+import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import org.slf4j.Logger;
 
 import java.net.MalformedURLException;

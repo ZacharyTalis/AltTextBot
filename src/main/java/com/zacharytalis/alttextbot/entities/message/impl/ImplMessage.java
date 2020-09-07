@@ -24,13 +24,6 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.zacharytalis.alttextbot.ImplDiscordAPI;
-import com.zacharytalis.alttextbot.entities.message.embed.Embed;
-import com.zacharytalis.alttextbot.entities.message.embed.EmbedBuilder;
-import com.zacharytalis.alttextbot.entities.message.embed.impl.ImplEmbed;
-import com.zacharytalis.alttextbot.entities.permissions.Role;
-import com.zacharytalis.alttextbot.listener.message.MessageDeleteListener;
-import com.zacharytalis.alttextbot.listener.message.MessageEditListener;
-import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import com.zacharytalis.alttextbot.entities.Channel;
 import com.zacharytalis.alttextbot.entities.CustomEmoji;
 import com.zacharytalis.alttextbot.entities.Server;
@@ -41,6 +34,13 @@ import com.zacharytalis.alttextbot.entities.message.Message;
 import com.zacharytalis.alttextbot.entities.message.MessageAttachment;
 import com.zacharytalis.alttextbot.entities.message.MessageReceiver;
 import com.zacharytalis.alttextbot.entities.message.Reaction;
+import com.zacharytalis.alttextbot.entities.message.embed.Embed;
+import com.zacharytalis.alttextbot.entities.message.embed.EmbedBuilder;
+import com.zacharytalis.alttextbot.entities.message.embed.impl.ImplEmbed;
+import com.zacharytalis.alttextbot.entities.permissions.Role;
+import com.zacharytalis.alttextbot.listener.message.MessageDeleteListener;
+import com.zacharytalis.alttextbot.listener.message.MessageEditListener;
+import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import com.zacharytalis.alttextbot.utils.ratelimits.RateLimitType;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +53,8 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The implementation of the user interface.
@@ -63,6 +65,8 @@ public class ImplMessage implements Message {
      * The logger of this class.
      */
     private static final Logger logger = LoggerUtil.getLogger(ImplMessage.class);
+
+    private static final Pattern PREFIX_PATTERN = Pattern.compile("^(?<prefix>\\S*)\\s?.*");
 
     private static final ThreadLocal<SimpleDateFormat> TIMEZONE_FORMAT = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -232,6 +236,17 @@ public class ImplMessage implements Message {
     }
 
     @Override
+    public String getPrefix() {
+        final String content = getContent();
+        final Matcher matcher = PREFIX_PATTERN.matcher(content);
+
+        if (matcher.matches())
+            return matcher.group("prefix");
+
+        return content;
+    }
+
+    @Override
     public String getContent() {
         return content;
     }
@@ -298,8 +313,8 @@ public class ImplMessage implements Message {
         return api.getThreadPool().getExecutorService().submit(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
-                logger.debug("Trying to pin message (id: {}, author: {}, content: \"{}\")",
-                        getId(), getAuthor(), getContent());
+                logger.debug("Trying to pin message (id: {}, author: {})",
+                        getId(), getAuthor());
                 if (isPrivateMessage()) {
                     api.checkRateLimit(null, RateLimitType.PRIVATE_MESSAGE, null, null);
                 } else {
@@ -315,8 +330,8 @@ public class ImplMessage implements Message {
                 } else {
                     api.checkRateLimit(response, RateLimitType.SERVER_MESSAGE, null, getChannelReceiver());
                 }
-                logger.debug("Pinned message (id: {}, author: {}, content: \"{}\")",
-                        getId(), getAuthor(), getContent());
+                logger.debug("Pinned message (id: {}, author: {})",
+                        getId(), getAuthor());
                 synchronized (this) {
                     if (message.isPinned())
                         return null;
@@ -339,8 +354,8 @@ public class ImplMessage implements Message {
         return api.getThreadPool().getExecutorService().submit(new Callable<Void>() {
             @Override
             public Void call() throws Exception {
-                logger.debug("Trying to delete message (id: {}, author: {}, content: \"{}\")",
-                        getId(), getAuthor(), getContent());
+                logger.debug("Trying to delete message (id: {}, author: {})",
+                        getId(), getAuthor());
                 if (isPrivateMessage()) {
                     api.checkRateLimit(null, RateLimitType.PRIVATE_MESSAGE_DELETE, null, null);
                 } else {
@@ -358,8 +373,8 @@ public class ImplMessage implements Message {
                             response, RateLimitType.SERVER_MESSAGE_DELETE, null, getChannelReceiver());
                 }
                 api.removeMessage(message);
-                logger.debug("Deleted message (id: {}, author: {}, content: \"{}\")",
-                        getId(), getAuthor(), getContent());
+                logger.debug("Deleted message (id: {}, author: {})",
+                        getId(), getAuthor());
                 synchronized (this) {
                     if (message.isDeleted()) {
                         return null;
@@ -376,7 +391,7 @@ public class ImplMessage implements Message {
                             for (MessageDeleteListener listener : listeners) {
                                 try {
                                     listener.onMessageDelete(api, message);
-                                } catch (Throwable t) {
+                                } catch (Exception t) {
                                     logger.warn("Uncaught exception in MessageDeleteListener!", t);
                                 }
                             }
@@ -463,7 +478,7 @@ public class ImplMessage implements Message {
                                 for (MessageEditListener listener : listeners) {
                                     try {
                                         listener.onMessageEdit(api, ImplMessage.this, oldContent);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in MessageEditListener!", t);
                                     }
                                 }
@@ -687,7 +702,7 @@ public class ImplMessage implements Message {
 
     @Override
     public String toString() {
-        return getAuthor().getName() + ": " + getContent() + " (id: " + getId() + ")";
+        return getAuthor().getName() + " (id: " + getId() + ")";
     }
 
     @Override

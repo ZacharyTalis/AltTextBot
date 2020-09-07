@@ -28,6 +28,10 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.body.MultipartBody;
 import com.zacharytalis.alttextbot.ImplDiscordAPI;
+import com.zacharytalis.alttextbot.entities.Channel;
+import com.zacharytalis.alttextbot.entities.InviteBuilder;
+import com.zacharytalis.alttextbot.entities.Server;
+import com.zacharytalis.alttextbot.entities.User;
 import com.zacharytalis.alttextbot.entities.message.Message;
 import com.zacharytalis.alttextbot.entities.message.MessageHistory;
 import com.zacharytalis.alttextbot.entities.message.MessageReceiver;
@@ -44,10 +48,6 @@ import com.zacharytalis.alttextbot.listener.channel.ChannelChangeTopicListener;
 import com.zacharytalis.alttextbot.listener.channel.ChannelDeleteListener;
 import com.zacharytalis.alttextbot.utils.LoggerUtil;
 import com.zacharytalis.alttextbot.utils.SnowflakeUtil;
-import com.zacharytalis.alttextbot.entities.Channel;
-import com.zacharytalis.alttextbot.entities.InviteBuilder;
-import com.zacharytalis.alttextbot.entities.Server;
-import com.zacharytalis.alttextbot.entities.User;
 import com.zacharytalis.alttextbot.utils.ratelimits.RateLimitType;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -287,8 +287,8 @@ public class ImplChannel implements Channel {
                 api.getThreadPool().getListeningExecutorService().submit(new Callable<Message>() {
                     @Override
                     public Message call() throws Exception {
-                        logger.debug("Trying to send message in channel {} (content: \"{}\", tts: {})",
-                                ImplChannel.this, content, tts);
+                        logger.debug("Trying to send message in channel {} (tts: {})",
+                                ImplChannel.this, tts);
                         api.checkRateLimit(null, RateLimitType.SERVER_MESSAGE, null, ImplChannel.this);
                         JSONObject body = new JSONObject()
                                 .put("content", content)
@@ -308,8 +308,8 @@ public class ImplChannel implements Channel {
                                         .asJson();
                         api.checkResponse(response);
                         api.checkRateLimit(response, RateLimitType.SERVER_MESSAGE, null, ImplChannel.this);
-                        logger.debug("Sent message in channel {} (content: \"{}\", tts: {})",
-                                ImplChannel.this, content, tts);
+                        logger.debug("Sent message in channel {} (tts: {})",
+                                ImplChannel.this, tts);
                         return new ImplMessage(response.getBody().getObject(), api, receiver);
                     }
                 });
@@ -607,7 +607,7 @@ public class ImplChannel implements Channel {
                                 for (ChannelChangeNameListener listener : listeners) {
                                     try {
                                         listener.onChannelChangeName(api, ImplChannel.this, oldName);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in ChannelChangeNameListener!", t);
                                     }
                                 }
@@ -630,7 +630,7 @@ public class ImplChannel implements Channel {
                                 for (ChannelChangeTopicListener listener : listeners) {
                                     try {
                                         listener.onChannelChangeTopic(api, ImplChannel.this, oldTopic);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in ChannelChangeTopicListener!", t);
                                     }
                                 }
@@ -652,7 +652,7 @@ public class ImplChannel implements Channel {
                                 for (ChannelChangePositionListener listener : listeners) {
                                     try {
                                         listener.onChannelChangePosition(api, ImplChannel.this, oldPosition);
-                                    } catch (Throwable t) {
+                                    } catch (Exception t) {
                                         logger.warn("Uncaught exception in ChannelChangePositionListener!", t);
                                     }
                                 }

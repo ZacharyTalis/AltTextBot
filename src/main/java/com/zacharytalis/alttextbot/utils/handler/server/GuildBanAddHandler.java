@@ -61,7 +61,7 @@ public class GuildBanAddHandler extends PacketHandler {
                         for (ServerMemberBanListener listener : listeners) {
                             try {
                                 listener.onServerMemberBan(api, user, server);
-                            } catch (Throwable t) {
+                            } catch (Exception t) {
                                 logger.warn("Uncaught exception in ServerMemberBanListener!", t);
                             }
                         }

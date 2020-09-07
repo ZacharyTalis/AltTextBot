@@ -79,7 +79,7 @@ public class TypingStartHandler extends PacketHandler {
                     for (TypingStartListener listener : listeners) {
                         try {
                             listener.onTypingStart(api, user, channel);
-                        } catch (Throwable t) {
+                        } catch (Exception t) {
                             logger.warn("Uncaught exception in TypingStartListener!", t);
                         }
                     }
