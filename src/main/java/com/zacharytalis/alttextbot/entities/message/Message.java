@@ -19,12 +19,12 @@
 package com.zacharytalis.alttextbot.entities.message;
 
 import com.google.common.util.concurrent.FutureCallback;
-import com.zacharytalis.alttextbot.entities.message.embed.Embed;
-import com.zacharytalis.alttextbot.entities.message.embed.EmbedBuilder;
-import com.zacharytalis.alttextbot.entities.permissions.Role;
 import com.zacharytalis.alttextbot.entities.Channel;
 import com.zacharytalis.alttextbot.entities.CustomEmoji;
 import com.zacharytalis.alttextbot.entities.User;
+import com.zacharytalis.alttextbot.entities.message.embed.Embed;
+import com.zacharytalis.alttextbot.entities.message.embed.EmbedBuilder;
+import com.zacharytalis.alttextbot.entities.permissions.Role;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -42,6 +42,13 @@ public interface Message extends Comparable<Message> {
      * @return The id of the message.
      */
     public String getId();
+
+    /**
+     * Get the prefix of the message, which is the first word.
+     *
+     * @return The prefix of the message.
+     */
+    public String getPrefix();
 
     /**
      * Gets the content of the message.
