@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: com.zacharytalis.alttextbot.AltTextBot
-Class-Path: httpcore-4.4.4.jar log4j-to-slf4j-2.13.3.jar httpmime-4.5.2.
- jar log4j-api-2.13.3.jar logback-classic-1.2.3.jar httpcore-nio-4.4.4.j
- ar nv-websocket-client-1.31.jar json-20140107.jar slf4j-api-1.7.22.jar 
- unirest-java-1.4.9.jar commons-codec-1.9.jar guava-20.0.jar logback-cor
- e-1.2.3.jar commons-logging-1.2.jar httpasyncclient-4.1.1.jar httpclien
- t-4.5.2.jar activation-1.1.jar mail-1.4.jar
-
