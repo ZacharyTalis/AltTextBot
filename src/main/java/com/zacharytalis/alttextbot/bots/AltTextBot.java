@@ -2,8 +2,8 @@ package com.zacharytalis.alttextbot.bots;
 
 import com.zacharytalis.alttextbot.commands.CommandRegistry;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
-import com.zacharytalis.alttextbot.utils.functions.Functions;
 import com.zacharytalis.alttextbot.utils.ReadOnly;
+import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.slf4j.Logger;
