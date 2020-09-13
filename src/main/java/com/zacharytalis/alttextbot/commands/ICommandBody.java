@@ -1,6 +1,5 @@
 package com.zacharytalis.alttextbot.commands;
 
-import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
 
 import java.util.function.Consumer;

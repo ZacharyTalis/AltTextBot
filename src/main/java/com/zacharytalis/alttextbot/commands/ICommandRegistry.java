@@ -8,8 +8,6 @@ import com.zacharytalis.alttextbot.utils.ReadOnly;
 import org.javacord.api.entity.message.Message;
 
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 

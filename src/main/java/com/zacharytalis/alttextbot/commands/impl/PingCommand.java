@@ -4,8 +4,8 @@ import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.commands.BaseCommandBody;
 import com.zacharytalis.alttextbot.commands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
-import com.zacharytalis.alttextbot.utils.functions.Functions;
 import com.zacharytalis.alttextbot.utils.Messages;
+import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.entity.message.MessageBuilder;
 
 public class PingCommand extends BaseCommandBody {

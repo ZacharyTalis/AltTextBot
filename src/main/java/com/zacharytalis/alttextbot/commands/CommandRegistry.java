@@ -2,7 +2,9 @@ package com.zacharytalis.alttextbot.commands;
 
 import com.google.common.collect.ForwardingMap;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class CommandRegistry extends ForwardingMap<String, CommandInfo> implements ICommandRegistry<CommandRegistry> {
     protected final Map<String, CommandInfo> commands;

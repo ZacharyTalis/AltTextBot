@@ -1,6 +1,9 @@
 package com.zacharytalis.alttextbot.utils.functions;
 
-import java.util.function.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Functions {
     public static <T, R> R doNothing(T unused) {
