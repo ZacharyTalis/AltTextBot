@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'java-library-distribution'
+}
+
+group 'com.zacharytalis'
+version '1.0'
+
+sourceCompatibility = 14
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.javacord:javacord:3.0.6'
+
+    implementation 'org.apache.logging.log4j:log4j-core:2.13.3'
+    implementation 'org.apache.logging.log4j:log4j-to-slf4j:2.13.3'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+
+    implementation 'com.google.guava:guava:29.0-jre'
+    implementation 'javax.mail:mail:1.4'
+
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+task copyToLib(type: Copy) {
+    into "${buildDir}/libs/lib"
+    from configurations.runtimeClasspath
+}
+
+jar {
+    dependsOn copyToLib
+
+    manifest {
+        attributes  "Main-Class": "com.zacharytalis.alttextbot.EntryPoint",
+                    "Class-Path": configurations.runtimeClasspath.collect {"lib/$it.name" }.join(' ')
+    }
+
+    archiveBaseName.set('AltTextBot')
+
+    exclude "META-INF/*.MF"
+    exclude "META-INF/*.SF"
+    exclude "META-INF/*.DSA"
+    exclude "META-INF/*.RSA"
+}
+
+tasks.withType(JavaCompile).each {
+    it.options.compilerArgs.add('--enable-preview')
+}
