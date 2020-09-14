@@ -29,6 +29,11 @@ task copyToLib(type: Copy) {
     from configurations.runtimeClasspath
 }
 
+task copySetupFiles(type: Copy) {
+    into "${buildDir}/libs"
+    from ("${rootDir}/.env", "${rootDir}/entrypoint.sh")
+}
+
 task zipBuild(type: Zip) {
     from "${buildDir}/libs/"
     include '*'
@@ -37,10 +42,12 @@ task zipBuild(type: Zip) {
     destinationDir(file("${buildDir}/distributions/"))
 }
 
-tasks.zipBuild.shouldRunAfter(tasks.copyToLib)
+tasks.copySetupFiles.shouldRunAfter(tasks.copyToLib)
+tasks.zipBuild.shouldRunAfter(tasks.copySetupFiles)
 
 jar {
     dependsOn copyToLib
+    dependsOn copySetupFiles
     dependsOn zipBuild
 
     manifest {

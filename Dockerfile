@@ -1,18 +1,13 @@
 FROM openjdk:14-alpine
 MAINTAINER glossawy
 
-ARG token
-ARG adminpass
-ARG adminuser
+COPY ./build/libs /app
+RUN apk add bash
+RUN chmod +x /app/entrypoint.sh
 
-ENV BOT_TOKEN=${token}
-ENV ADMIN_APP_PASS=${adminpass}
-ENV ADMIN_APP_USER=${adminuser}
+SHELL ["/bin/bash", "-c"]
+
 ENV LOG_PATH=/app/logs
-
 VOLUME /app/logs
 
-COPY ./build/libs /app
-
-WORKDIR /app
-CMD ["java", "--enable-preview", "-jar", "/app/AltTextBot-1.0.jar"]
+CMD /app/entrypoint.sh
