@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'java-library-distribution'
 }
 
 group 'com.zacharytalis'
@@ -30,8 +29,19 @@ task copyToLib(type: Copy) {
     from configurations.runtimeClasspath
 }
 
+task zipBuild(type: Zip) {
+    from "${buildDir}/libs/"
+    include '*'
+    include '*/*'
+    archiveName 'alt-text-bot.zip'
+    destinationDir(file("${buildDir}/distributions/"))
+}
+
+tasks.zipBuild.shouldRunAfter(tasks.copyToLib)
+
 jar {
     dependsOn copyToLib
+    dependsOn zipBuild
 
     manifest {
         attributes  "Main-Class": "com.zacharytalis.alttextbot.EntryPoint",

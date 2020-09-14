@@ -10,8 +10,9 @@ ENV ADMIN_APP_PASS=${adminpass}
 ENV ADMIN_APP_USER=${adminuser}
 ENV LOG_PATH=/app/logs
 
-COPY . /app
 VOLUME /app/logs
-WORKDIR /app
 
-CMD ["java", "--enable-preview", "-jar", "/app/build/libs/AltTextBot-1.0.jar"]
+COPY ./build/libs /app
+
+WORKDIR /app
+CMD ["java", "--enable-preview", "-jar", "/app/AltTextBot-1.0.jar"]
