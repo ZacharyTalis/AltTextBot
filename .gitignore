@@ -142,4 +142,4 @@ gradle-app.setting
 .run/
 logs/**/*
 !logs/.gitkeep
-
+build/
