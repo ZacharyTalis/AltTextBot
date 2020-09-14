@@ -36,8 +36,4 @@ public class Functions {
             return null;
         };
     }
-
-    public static <T, U> Runnable partial(Function<T, U> fn, T val) {
-        return () -> { fn.apply(val); };
-    }
 }

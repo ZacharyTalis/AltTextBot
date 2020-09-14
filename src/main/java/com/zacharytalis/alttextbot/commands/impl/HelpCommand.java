@@ -28,7 +28,7 @@ public class HelpCommand extends BaseCommandBody {
     @Override
     protected void call(CommandMessage msg) {
         MessageBuilder helpText =
-                getBot()
+                bot()
                 .getCommands()
                 .readOnly()
                 .values()
@@ -41,8 +41,7 @@ public class HelpCommand extends BaseCommandBody {
 
         msg.getUserAuthor().map(helpText::send).ifPresent(msgFuture -> {
             msgFuture.exceptionally(Functions.nullify(t -> {
-                var author = msg.getAuthor().getDiscriminatedName();
-                getLogger().error("Failed to send help text to " + author, t);
+                logger().error(t, "Failed to send help text to user. {}", msg);
             }));
         });
     }

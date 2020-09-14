@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
-public class CommandMessage extends ForwardingObject implements Message {
+public class CommandMessage extends ForwardingObject implements Message, Loggable {
     private static final Pattern PREFIX_PATTERN = Pattern.compile("^(?<prefix>\\S*)\\s?.*");
 
     private final Message delegate;
@@ -45,6 +45,19 @@ public class CommandMessage extends ForwardingObject implements Message {
             return matcher.group("prefix");
 
         return content;
+    }
+
+    public MessageAuthorInfo getAuthorInfo() {
+        return new MessageAuthorInfo(getAuthor());
+    }
+
+    @Override
+    public String toLoggerString() {
+        final var author = getAuthorInfo();
+        final var channel = Messages.getNameOrElse(this::getServerTextChannel, "unknown");
+        final var server = Messages.getNameOrElse(this::getServer, "unknown");
+
+        return Toolbox.loggerFormat("{}, server: {}, channel: {}", author, channel, server);
     }
 
     @Override

@@ -1,9 +1,13 @@
 package com.zacharytalis.alttextbot.commands;
 
+import com.google.common.base.Stopwatch;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
+import com.zacharytalis.alttextbot.logging.Logger;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.zacharytalis.alttextbot.utils.Toolbox;
+import com.zacharytalis.alttextbot.utils.functions.Runnables;
+
+import java.util.concurrent.CompletableFuture;
 
 public abstract class BaseCommandBody implements ICommandBody {
     private final AltTextBot bot;
@@ -11,31 +15,47 @@ public abstract class BaseCommandBody implements ICommandBody {
 
     public BaseCommandBody(final AltTextBot bot) {
         this.bot = bot;
-        this.logger = LoggerFactory.getLogger(this.getClass());
+
+        // { BotName :: CommandClass (CommandName)}
+        final var logPrefix = "{" + bot.getInternalName() + " :: " + getClass().getSimpleName() + " (" + getName() + ")}";
+        this.logger = Toolbox.getLogger(this.getClass(), logPrefix);
     }
 
     @Override
-    public final void execute(CommandMessage msg) {
-        preCommand(msg);
-        this.call(msg);
-        postCommand(msg);
+    public final CompletableFuture<Void> executeAsync(CommandMessage msg) {
+        return
+            Toolbox
+                .nullFuture()
+                .thenRunAsync(Runnables.fromConsumer(this::preCommand, msg))            // Pre-execution
+                .thenRun(() -> recordDuration(Toolbox.timed(this::call, msg)))          // Timed Execution
+                .thenRun(Runnables.fromConsumer(this::postCommand, msg))                // Post-execution
+                .exceptionally(Toolbox.acceptAndRethrow(this::handleError));            // Error handling
+        // Errors will be rethrown for another exception handler
     }
 
-    protected AltTextBot getBot() {
+    protected AltTextBot bot() {
         return bot;
     }
 
-    protected Logger getLogger() {
+    protected Logger logger() {
         return logger;
     }
 
     protected abstract void call(CommandMessage msg);
 
     protected void preCommand(final CommandMessage msg) {
-        getLogger().debug("Command received: {}", getName());
+        logger().debug("Command execution starting");
+    }
+
+    protected void recordDuration(final Stopwatch result) {
+        logger().debug("Execution completed in {}", result);
     }
 
     protected void postCommand(final CommandMessage msg) {
-        getLogger().debug("Command completed: {}", getName());
+        logger().debug("Command execution complete");
+    }
+
+    protected void handleError(final Throwable t) {
+        logger().error("Error occurred", t);
     }
 }

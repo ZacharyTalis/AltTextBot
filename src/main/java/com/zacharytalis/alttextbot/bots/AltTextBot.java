@@ -1,19 +1,19 @@
 package com.zacharytalis.alttextbot.bots;
 
 import com.zacharytalis.alttextbot.commands.CommandRegistry;
+import com.zacharytalis.alttextbot.logging.Logger;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
 import com.zacharytalis.alttextbot.utils.ReadOnly;
+import com.zacharytalis.alttextbot.utils.Toolbox;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class AltTextBot implements DiscordBot<AltTextBot> {
-    private static final Logger logger = LoggerFactory.getLogger(AltTextBot.class);
+    private static final Logger logger = Toolbox.getLogger(AltTextBot.class);
 
     private final CommandRegistry commands;
     private final DiscordApiBuilder apiBuilder;
@@ -80,7 +80,7 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
             final var msg = new CommandMessage(event.getMessage());
 
             if(commands.containsKey(msg))
-                commands.prepareCommand(msg.getCommandPrefix(), AltTextBot.this).execute(msg);
-        });
+                commands.prepareCommand(msg.getCommandPrefix(), AltTextBot.this).executeAsync(msg);
+        }).isGlobalListener();
     }
 }

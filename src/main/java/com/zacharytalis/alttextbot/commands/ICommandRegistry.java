@@ -8,6 +8,7 @@ import com.zacharytalis.alttextbot.utils.ReadOnly;
 import org.javacord.api.entity.message.Message;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -25,8 +26,9 @@ public interface ICommandRegistry<T extends ICommandRegistry<T>> extends Map<Str
                 }
 
                 @Override
-                public void execute(CommandMessage msg) {
-                    body.apply(bot).accept(msg);
+                public CompletableFuture<Void> executeAsync(CommandMessage msg) {
+                    final var cmdBody = body.apply(bot);
+                    return CompletableFuture.runAsync(() -> cmdBody.accept(msg));
                 }
             }
         );

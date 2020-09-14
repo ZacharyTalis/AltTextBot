@@ -10,9 +10,9 @@ public class CommandRegistry extends ForwardingMap<String, CommandInfo> implemen
     protected final Map<String, CommandInfo> commands;
 
     public CommandRegistry() {
-        // This could be a ConcurrentSkipListMap if we ever need concurrency guarantees,
+        // This could be a ConcurrentSkipListMap if we ever need better concurrency guarantees,
         // may or may not sacrifice predictable iteration order.
-        commands = new LinkedHashMap<>();
+        commands = Collections.synchronizedMap(new LinkedHashMap<>());
     }
 
     private CommandRegistry(Map<String, CommandInfo> commands) {
