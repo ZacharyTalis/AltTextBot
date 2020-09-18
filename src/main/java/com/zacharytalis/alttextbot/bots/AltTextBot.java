@@ -2,9 +2,9 @@ package com.zacharytalis.alttextbot.bots;
 
 import com.zacharytalis.alttextbot.commands.CommandRegistry;
 import com.zacharytalis.alttextbot.logging.Logger;
-import com.zacharytalis.alttextbot.utils.CommandMessage;
-import com.zacharytalis.alttextbot.utils.ReadOnly;
-import com.zacharytalis.alttextbot.utils.Toolbox;
+import com.zacharytalis.alttextbot.utils.*;
+import com.zacharytalis.alttextbot.utils.config.ConfigurationException;
+import com.zacharytalis.alttextbot.utils.config.IConfig;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -17,18 +17,28 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
 
     private final CommandRegistry commands;
     private final DiscordApiBuilder apiBuilder;
+    private final IConfig config;
     private CompletableFuture<DiscordApi> discordApi;
 
-    public AltTextBot(final String token, final CommandRegistry registry) {
+    public AltTextBot(final IConfig config, final CommandRegistry registry) throws ConfigurationException {
         this.commands = registry;
+        this.config = config;
+
+        logger.debug("Bot Initialized");
+
         this.apiBuilder =
             new DiscordApiBuilder()
-                .setToken(token);
+                .setToken(config.getToken());
     }
 
     @Override
     public CompletableFuture<AltTextBot> start() {
-        this.discordApi = this.apiBuilder.login();
+        this.discordApi = Futures.runThenGet(() -> logger.debug("Logging In..."), this.apiBuilder::login);
+
+        this.discordApi.thenAccept(api -> {
+            final var link = api.createBotInvite(Ref.REQUIRED_PERMS);
+            logger.info("{} Invite Link: {}", getInternalName(), link);
+        });
 
         var future = new CompletableFuture<AltTextBot>();
 
@@ -67,6 +77,11 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
     @Override
     public ReadOnly<CommandRegistry> getCommands() {
         return this.commands.readOnly();
+    }
+
+    @Override
+    public IConfig getConfig() {
+        return config;
     }
 
     private void assertStarted() throws NotStartedException {
