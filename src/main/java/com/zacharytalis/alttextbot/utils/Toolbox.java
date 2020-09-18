@@ -83,15 +83,25 @@ public class Toolbox {
 
     public static Logger getLogger(String name, String prefix) {
         final var botLogger = getLogger(name);
-        final var logger = new PrefixingLogger(botLogger, prefix);
-        namedLoggers.put(name, logger);
-        return logger;
+
+        if (botLogger instanceof PrefixingLogger logger && logger.getPrefix().equals(prefix))
+            return logger;
+        else {
+            final var logger = new PrefixingLogger(botLogger, prefix);
+            namedLoggers.put(name, logger);
+            return logger;
+        }
     }
 
     public static Logger getLogger(Class<?> clazz, String prefix) {
         final var botLogger = getLogger(clazz);
-        final var logger = new PrefixingLogger(botLogger, prefix);
-        classLoggers.put(clazz, logger);
-        return logger;
+
+        if (botLogger instanceof PrefixingLogger logger && logger.getPrefix().equals(prefix))
+            return logger;
+        else {
+            final var logger = new PrefixingLogger(botLogger, prefix);
+            classLoggers.put(clazz, logger);
+            return logger;
+        }
     }
 }
