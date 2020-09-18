@@ -1,7 +1,6 @@
 package com.zacharytalis.alttextbot.logging;
 
 import com.zacharytalis.alttextbot.utils.Toolbox;
-import org.slf4j.Logger;
 
 public class PrefixingLogger extends ForwardingLogger {
     private final String prefix;
@@ -9,6 +8,10 @@ public class PrefixingLogger extends ForwardingLogger {
     public PrefixingLogger(Logger wrappedLogger, String prefix) {
         super(wrappedLogger);
         this.prefix = prefix;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 
     @Override
