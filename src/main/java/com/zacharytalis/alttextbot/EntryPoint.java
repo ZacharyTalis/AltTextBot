@@ -5,16 +5,20 @@ import com.zacharytalis.alttextbot.commands.CommandRegistry;
 import com.zacharytalis.alttextbot.commands.impl.AltCommand;
 import com.zacharytalis.alttextbot.commands.impl.HelpCommand;
 import com.zacharytalis.alttextbot.commands.impl.PingCommand;
-
-import static com.zacharytalis.alttextbot.utils.Ref.TOKEN_VAR;
+import com.zacharytalis.alttextbot.exceptions.InvalidEnvironmentError;
+import com.zacharytalis.alttextbot.logging.Logger;
+import com.zacharytalis.alttextbot.utils.Configs;
+import com.zacharytalis.alttextbot.utils.Toolbox;
+import com.zacharytalis.alttextbot.utils.config.ConfigurationException;
 
 public class EntryPoint {
-    public static void main(String[] args) throws NoSuchFieldException {
-        var token = System.getenv(TOKEN_VAR);
-        var cmds = new CommandRegistry();
+    public static final Logger logger = Toolbox.getLogger("StartUp");
 
-        if (token == null)
-            throw new NullPointerException("No environment variable: BOT_TOKEN");
+    public static void main(String[] args) throws InvalidEnvironmentError, ConfigurationException {
+        final var config = Configs.getConfigFromEnv();
+        final var cmds = new CommandRegistry();
+
+        logger.info("Starting up with {} env", config.getEnv());
 
         cmds.register(
             HelpCommand.description(),
@@ -22,7 +26,9 @@ public class EntryPoint {
             AltCommand.description()
         );
 
-        final var bot = new AltTextBot(token, cmds);
+        logger.info("Starting Alt Text Bot");
+
+        final var bot = new AltTextBot(config, cmds);
         bot.start().join();
     }
 }
