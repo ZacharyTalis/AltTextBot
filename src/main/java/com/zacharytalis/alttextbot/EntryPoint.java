@@ -5,7 +5,7 @@ import com.zacharytalis.alttextbot.commands.CommandRegistry;
 import com.zacharytalis.alttextbot.commands.impl.AltCommand;
 import com.zacharytalis.alttextbot.commands.impl.HelpCommand;
 import com.zacharytalis.alttextbot.commands.impl.PingCommand;
-import com.zacharytalis.alttextbot.exceptions.InvalidEnvironmentError;
+import com.zacharytalis.alttextbot.exceptions.InvalidEnvironmentException;
 import com.zacharytalis.alttextbot.logging.Logger;
 import com.zacharytalis.alttextbot.utils.Configs;
 import com.zacharytalis.alttextbot.utils.Toolbox;
@@ -14,7 +14,7 @@ import com.zacharytalis.alttextbot.utils.config.ConfigurationException;
 public class EntryPoint {
     public static final Logger logger = Toolbox.getLogger("StartUp");
 
-    public static void main(String[] args) throws InvalidEnvironmentError, ConfigurationException {
+    public static void main(String[] args) throws InvalidEnvironmentException, ConfigurationException {
         final var config = Configs.getConfigFromEnv();
         final var cmds = new CommandRegistry();
 
