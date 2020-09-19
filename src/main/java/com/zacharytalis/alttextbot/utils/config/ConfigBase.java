@@ -3,7 +3,7 @@ package com.zacharytalis.alttextbot.utils.config;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class ConfigBase implements IConfig {
+public abstract class ConfigBase implements Config {
     private final Map<String, String> env = System.getenv();
 
     final Map<String, String> env() {

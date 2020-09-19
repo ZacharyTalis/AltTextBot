@@ -3,8 +3,8 @@ package com.zacharytalis.alttextbot.bots;
 import com.zacharytalis.alttextbot.commands.CommandRegistry;
 import com.zacharytalis.alttextbot.logging.Logger;
 import com.zacharytalis.alttextbot.utils.*;
+import com.zacharytalis.alttextbot.utils.config.Config;
 import com.zacharytalis.alttextbot.utils.config.ConfigurationException;
-import com.zacharytalis.alttextbot.utils.config.IConfig;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -13,18 +13,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class AltTextBot implements DiscordBot<AltTextBot> {
-    private static final Logger logger = Toolbox.getLogger(AltTextBot.class);
+    private static final Logger logger = Toolbox.inferLogger();
 
     private final CommandRegistry commands;
     private final DiscordApiBuilder apiBuilder;
-    private final IConfig config;
+    private final Config config;
     private CompletableFuture<DiscordApi> discordApi;
 
-    public AltTextBot(final IConfig config, final CommandRegistry registry) throws ConfigurationException {
+    public AltTextBot(final Config config, final CommandRegistry registry) throws ConfigurationException {
         this.commands = registry;
         this.config = config;
 
-        logger.debug("Bot Initialized");
+        logger.info("Bot Initialized");
 
         this.apiBuilder =
             new DiscordApiBuilder()
@@ -33,11 +33,11 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
 
     @Override
     public CompletableFuture<AltTextBot> start() {
-        this.discordApi = Futures.runThenGet(() -> logger.debug("Logging In..."), this.apiBuilder::login);
+        this.discordApi = Futures.runThenGet(() -> logger.info("Logging In..."), this.apiBuilder::login);
 
         this.discordApi.thenAccept(api -> {
             final var link = api.createBotInvite(Ref.REQUIRED_PERMS);
-            logger.info("{} Invite Link: {}", getInternalName(), link);
+            logger.info("{} Invite Link: {}", internalName(), link);
         });
 
         var future = new CompletableFuture<AltTextBot>();
@@ -58,29 +58,29 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
     }
 
     @Override
-    public CompletableFuture<Void> whenApiAvailable(Consumer<DiscordApi> action) throws NotStartedException {
-        return this.getApi().thenAcceptAsync(action);
+    public CompletableFuture<Void> whenApiAvailable(Consumer<DiscordApi> action) {
+        return this.api().thenAcceptAsync(action);
     }
 
     @Override
-    public CompletableFuture<DiscordApi> getApi() throws NotStartedException {
+    public CompletableFuture<DiscordApi> api() {
         assertStarted();
 
         return this.discordApi;
     }
 
     @Override
-    public String getInternalName() {
+    public String internalName() {
         return "AltTextBot";
     }
 
     @Override
-    public ReadOnly<CommandRegistry> getCommands() {
+    public ReadOnly<CommandRegistry> commands() {
         return this.commands.readOnly();
     }
 
     @Override
-    public IConfig getConfig() {
+    public Config config() {
         return config;
     }
 
@@ -94,8 +94,12 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
         api.addMessageCreateListener(event -> {
             final var msg = new CommandMessage(event.getMessage());
 
-            if(commands.containsKey(msg))
+            logger.testingOnly().info("Message received: {}", msg);
+
+            if(!msg.getAuthorInfo().isYourself() && commands.containsKey(msg))
                 commands.prepareCommand(msg.getCommandPrefix(), AltTextBot.this).executeAsync(msg);
-        }).isGlobalListener();
+            else
+                logger.testingOnly().info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsKey(msg));
+        });
     }
 }

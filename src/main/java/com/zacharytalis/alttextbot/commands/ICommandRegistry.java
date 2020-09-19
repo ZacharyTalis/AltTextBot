@@ -1,51 +1,14 @@
 package com.zacharytalis.alttextbot.commands;
 
 import com.zacharytalis.alttextbot.bots.AltTextBot;
-import com.zacharytalis.alttextbot.utils.AnticipatedValue;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
 import com.zacharytalis.alttextbot.utils.Messages;
 import com.zacharytalis.alttextbot.utils.ReadOnly;
 import org.javacord.api.entity.message.Message;
 
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public interface ICommandRegistry<T extends ICommandRegistry<T>> extends Map<String, CommandInfo>, ReadOnly<T> {
-    default T registerFunctionally(String name, String help, Function<AltTextBot, Consumer<CommandMessage>> body) {
-        final AnticipatedValue<CommandInfo> infoProvider = new AnticipatedValue<>();
-
-        final var info = new CommandInfo(
-            name,
-            help,
-            bot -> new ICommandBody() {
-                @Override
-                public CommandInfo getInfo() {
-                    return infoProvider.demand();
-                }
-
-                @Override
-                public CompletableFuture<Void> executeAsync(CommandMessage msg) {
-                    final var cmdBody = body.apply(bot);
-                    return CompletableFuture.runAsync(() -> cmdBody.accept(msg));
-                }
-            }
-        );
-
-        infoProvider.provide(info);
-
-        return register(info);
-    }
-
-    default T register(String name, String help, Function<AltTextBot, ICommandBody> body) {
-        return register(new CommandInfo(
-            name,
-            help,
-            body
-        ));
-    }
-
     @SuppressWarnings("unchecked")
     default T register(CommandInfo info) {
         put(info.name(), info);
@@ -75,15 +38,15 @@ public interface ICommandRegistry<T extends ICommandRegistry<T>> extends Map<Str
         return register(newInfo);
     }
 
-    default ICommandBody prepareCommand(CommandMessage msg, AltTextBot bot) {
+    default CommandBody prepareCommand(CommandMessage msg, AltTextBot bot) {
         return get(msg).instantiate(bot);
     }
 
-    default ICommandBody prepareCommand(Message msg, AltTextBot bot) {
+    default CommandBody prepareCommand(Message msg, AltTextBot bot) {
          return get(msg).instantiate(bot);
     }
 
-    default ICommandBody prepareCommand(String name, AltTextBot bot) {
+    default CommandBody prepareCommand(String name, AltTextBot bot) {
         return get(name).instantiate(bot);
     }
 

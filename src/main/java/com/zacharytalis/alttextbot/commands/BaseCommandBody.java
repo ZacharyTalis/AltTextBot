@@ -9,7 +9,7 @@ import com.zacharytalis.alttextbot.utils.functions.Runnables;
 
 import java.util.concurrent.CompletableFuture;
 
-public abstract class BaseCommandBody implements ICommandBody {
+public abstract class BaseCommandBody implements CommandBody {
     private final AltTextBot bot;
     private final Logger logger;
 
@@ -17,7 +17,7 @@ public abstract class BaseCommandBody implements ICommandBody {
         this.bot = bot;
 
         // { BotName :: CommandClass (CommandName)}
-        final var logPrefix = "{" + bot.getInternalName() + " :: " + getClass().getSimpleName() + " (" + getName() + ")}";
+        final var logPrefix = "{" + bot.internalName() + " :: " + getClass().getSimpleName() + " (" + getName() + ")}";
         this.logger = Toolbox.getLogger(this.getClass(), logPrefix);
     }
 

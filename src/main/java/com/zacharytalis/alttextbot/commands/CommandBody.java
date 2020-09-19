@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface ICommandBody extends Consumer<CommandMessage>, Function<CommandMessage, CompletableFuture<Void>> {
+public interface CommandBody extends Consumer<CommandMessage>, Function<CommandMessage, CompletableFuture<Void>> {
     CommandInfo getInfo();
 
     default String getName() {
