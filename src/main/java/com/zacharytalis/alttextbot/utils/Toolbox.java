@@ -14,6 +14,16 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Toolbox {
+    private static class SecurityHelper extends SecurityManager {
+        static final int OFFSET = 1;
+
+        public Class<?> getCallingClass() {
+            return getClassContext()[OFFSET + 1];
+        }
+    }
+
+    private static final SecurityHelper securityHelper = new SecurityHelper();
+
     private static final HashMap<Class<?>, Logger> classLoggers = new HashMap<>();
     private static final HashMap<String, Logger> namedLoggers = new HashMap<>();
 
@@ -77,6 +87,10 @@ public class Toolbox {
         return namedLoggers.computeIfAbsent(name, n -> new LoggableLogger(LoggerFactory.getLogger(n)));
     }
 
+    public static Logger inferLogger() {
+        return getLogger(securityHelper.getCallingClass());
+    }
+
     public static Logger getLogger(Class<?> clazz) {
         return classLoggers.computeIfAbsent(clazz, c -> new LoggableLogger(LoggerFactory.getLogger(c)));
     }
@@ -102,6 +116,12 @@ public class Toolbox {
             final var logger = new PrefixingLogger(botLogger, prefix);
             classLoggers.put(clazz, logger);
             return logger;
+        }
+    }
+
+    public static void testOnly(Runnable run) {
+        if (Ref.currentEnv().isTesting()) {
+            run.run();
         }
     }
 }

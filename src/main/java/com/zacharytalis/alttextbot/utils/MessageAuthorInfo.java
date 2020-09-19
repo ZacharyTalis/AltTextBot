@@ -4,6 +4,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.Icon;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAuthor;
+import org.javacord.api.entity.user.User;
 
 import java.util.Optional;
 
@@ -38,6 +39,10 @@ public record MessageAuthorInfo(MessageAuthor author) implements MessageAuthor, 
         return author.getAvatar();
     }
 
+    public boolean isYourself() {
+        return asUser().map(User::isYourself).orElse(false);
+    }
+
     @Override
     public boolean isUser() {
         return author.isUser();
@@ -66,10 +71,11 @@ public record MessageAuthorInfo(MessageAuthor author) implements MessageAuthor, 
     @Override
     public String toLoggerString() {
         return String.format(
-            "author: %s, is_webhook: %s, is_bot: %s",
+            "author: %s, is_webhook: %s, is_bot: %s, is_self: %s",
             getDiscriminatedName(),
             toYesNo(isWebhook()),
-            toYesNo(isBotUser())
+            toYesNo(isBotUser()),
+            toYesNo(isYourself())
         );
     }
 }

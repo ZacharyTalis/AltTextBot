@@ -27,7 +27,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void trace(String msg) {
-        delegate().trace(finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().trace(finalizeMessage(msg));
     }
 
     @Override
@@ -47,7 +48,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void trace(String msg, Throwable t) {
-        delegate().trace(finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().trace(finalizeMessage(msg), t);
     }
 
     @Override
@@ -62,7 +64,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void trace(Marker marker, String msg) {
-        delegate().trace(marker, finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().trace(marker, finalizeMessage(msg));
     }
 
     @Override
@@ -82,7 +85,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void trace(Marker marker, String msg, Throwable t) {
-        delegate().trace(marker, finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().trace(marker, finalizeMessage(msg), t);
     }
 
     @Override
@@ -97,7 +101,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void debug(String msg) {
-        delegate().debug(finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().debug(finalizeMessage(msg));
     }
 
     @Override
@@ -117,7 +122,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void debug(String msg, Throwable t) {
-        delegate().debug(finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().debug(finalizeMessage(msg), t);
     }
 
     @Override
@@ -132,7 +138,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void debug(Marker marker, String msg) {
-        delegate().debug(marker, finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().debug(marker, finalizeMessage(msg));
     }
 
     @Override
@@ -152,7 +159,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void debug(Marker marker, String msg, Throwable t) {
-        delegate().debug(marker, finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().debug(marker, finalizeMessage(msg), t);
     }
 
     @Override
@@ -167,7 +175,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void info(String msg) {
-        delegate().info(finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().info(finalizeMessage(msg));
     }
 
     @Override
@@ -187,7 +196,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void info(String msg, Throwable t) {
-        delegate().info(finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().info(finalizeMessage(msg), t);
     }
 
     @Override
@@ -202,7 +212,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void info(Marker marker, String msg) {
-        delegate().info(marker, finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().info(marker, finalizeMessage(msg));
     }
 
     @Override
@@ -222,7 +233,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void info(Marker marker, String msg, Throwable t) {
-        delegate().info(marker, finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().info(marker, finalizeMessage(msg), t);
     }
 
     @Override
@@ -237,7 +249,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void warn(String msg) {
-        delegate().warn(finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().warn(finalizeMessage(msg));
     }
 
     @Override
@@ -257,7 +270,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void warn(String msg, Throwable t) {
-        delegate().warn(finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().warn(finalizeMessage(msg), t);
     }
 
     @Override
@@ -272,7 +286,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void warn(Marker marker, String msg) {
-        delegate().warn(marker, finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().warn(marker, finalizeMessage(msg));
     }
 
     @Override
@@ -292,7 +307,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void warn(Marker marker, String msg, Throwable t) {
-        delegate().warn(marker, finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().warn(marker, finalizeMessage(msg), t);
     }
 
     @Override
@@ -307,7 +323,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void error(String msg) {
-        delegate().error(finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().error(finalizeMessage(msg));
     }
 
     @Override
@@ -327,7 +344,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void error(String msg, Throwable t) {
-        delegate().error(finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().error(finalizeMessage(msg), t);
     }
 
     @Override
@@ -342,7 +360,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void error(Marker marker, String msg) {
-        delegate().error(marker, finalizeMessage(msg));
+        if (shouldLog(msg))
+            delegate().error(marker, finalizeMessage(msg));
     }
 
     @Override
@@ -362,7 +381,8 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     @Override
     public void error(Marker marker, String msg, Throwable t) {
-        delegate().error(marker, finalizeMessage(msg), t);
+        if (shouldLog(msg))
+            delegate().error(marker, finalizeMessage(msg), t);
     }
 
     @Override
@@ -372,6 +392,10 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
 
     protected String finalizeMessage(String message) {
         return message;
+    }
+
+    protected boolean shouldLog(String message) {
+        return true;
     }
 
     protected String formatLogMessage(String format, Object... arguments) {

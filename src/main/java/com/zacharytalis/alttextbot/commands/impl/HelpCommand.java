@@ -29,7 +29,7 @@ public class HelpCommand extends BaseCommandBody {
     protected void call(CommandMessage msg) {
         MessageBuilder helpText =
                 bot()
-                .getCommands()
+                .commands()
                 .readOnly()
                 .values()
                 .stream()

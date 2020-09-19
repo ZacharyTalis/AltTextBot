@@ -1,5 +1,6 @@
 package com.zacharytalis.alttextbot.utils;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.collect.ForwardingObject;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
@@ -24,7 +25,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 public class CommandMessage extends ForwardingObject implements Message, Loggable {
-    private static final Pattern PREFIX_PATTERN = Pattern.compile("^(?<prefix>\\S*)\\s?.*");
+    // ! or ? start commands, tries to fetch the first token (starter + word) at beginning of message.
+    // Stores in group named "prefix" in addition to group index 1.
+    private static final Pattern PREFIX_PATTERN = Pattern.compile("^(?<prefix>[!?]\\S+)");
+    private static final String PREFIX_GROUP = "prefix";
 
     private final Message delegate;
 
@@ -40,11 +44,18 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     public String getCommandPrefix() {
         final var content = getContent();
         final var matcher = PREFIX_PATTERN.matcher(content);
+        final var success = matcher.lookingAt();
 
-        if (matcher.matches())
-            return matcher.group("prefix");
+        Toolbox.testOnly(() -> {
+            Toolbox.getLogger(CommandMessage.class).debug(
+                "success: {}, prefix_group: {}, {}",
+                success,
+                success ? matcher.group(PREFIX_GROUP) : "null",
+                this
+            );
+        });
 
-        return content;
+        return success ? matcher.group(PREFIX_GROUP) : content;
     }
 
     public MessageAuthorInfo getAuthorInfo() {
@@ -54,10 +65,23 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     @Override
     public String toLoggerString() {
         final var author = getAuthorInfo();
-        final var channel = Messages.getNameOrElse(this::getServerTextChannel, "unknown");
-        final var server = Messages.getNameOrElse(this::getServer, "unknown");
+        final var channel = Messages.getNamedIdentifierOrElse(this::getServerTextChannel, "unknown");
+        final var server = Messages.getNamedIdentifierOrElse(this::getServer, "unknown");
 
-        return Toolbox.loggerFormat("{}, server: {}, channel: {}", author, channel, server);
+        var arguments = new Object[] { getIdAsString(), author, server, channel };
+        var logFormat = "id: {}, {}, server: {}, channel: {}";
+
+        if (Ref.currentEnv().isTesting()) {
+            logFormat = "content: ({}), " + logFormat;
+            arguments = Arrays.prepend(
+                Object.class,
+                CharMatcher.is('\n').replaceFrom(getContent(), "\\n"),
+                arguments
+            );
+        }
+
+
+        return Toolbox.loggerFormat(logFormat, arguments);
     }
 
     @Override
