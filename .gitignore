@@ -145,3 +145,9 @@ logs/**/*
 build/
 .gradle/
 .env
+
+db/**/*
+!db/.gitkeep
+
+.idea/codeStyles
+.idea/runConfigurations

@@ -1,5 +1,6 @@
 package com.zacharytalis.alttextbot.commands.impl;
 
+import com.zacharytalis.alttextbot.board.BoardServerFile;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.commands.BaseCommandBody;
 import com.zacharytalis.alttextbot.commands.CommandInfo;
@@ -41,10 +42,14 @@ public class AltCommand extends BaseCommandBody {
                    .exceptionally(
                        partial(this::handleDeletionFailure, recv)
                    );
+               new BoardServerFile(recv.getServerID()).incrementUserScore(recv.getUserAuthor().get().getId());
             })
             .exceptionallyAsync(
                 partial(this::handleSendFailure, recv)
             );
+
+        // User submitted alt-text, so increment their score.
+
     }
 
     private String getAltContent(CommandMessage msg) {

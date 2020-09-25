@@ -62,6 +62,10 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
         return new MessageAuthorInfo(getAuthor());
     }
 
+    public long getServerID() {
+        return getServer().get().getId();
+    }
+
     @Override
     public String toLoggerString() {
         final var author = getAuthorInfo();
