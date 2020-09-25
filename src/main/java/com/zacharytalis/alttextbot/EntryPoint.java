@@ -3,6 +3,7 @@ package com.zacharytalis.alttextbot;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.commands.CommandRegistry;
 import com.zacharytalis.alttextbot.commands.impl.AltCommand;
+import com.zacharytalis.alttextbot.commands.impl.BoardCommand;
 import com.zacharytalis.alttextbot.commands.impl.HelpCommand;
 import com.zacharytalis.alttextbot.commands.impl.PingCommand;
 import com.zacharytalis.alttextbot.exceptions.InvalidEnvironmentException;
@@ -19,15 +20,14 @@ public class EntryPoint {
         final var cmds = new CommandRegistry();
 
         logger.info("Starting up with {} env", config.getEnv());
-
         cmds.register(
             HelpCommand.description(),
             PingCommand.description(),
-            AltCommand.description()
+            AltCommand.description(),
+            BoardCommand.description()
         );
 
         logger.info("Starting Alt Text Bot");
-
         final var bot = new AltTextBot(config, cmds);
         bot.start().join();
     }

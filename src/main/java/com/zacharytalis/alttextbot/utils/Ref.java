@@ -50,6 +50,7 @@ public class Ref {
     public static final String TOKEN_VAR = "BOT_TOKEN";
     public static final String TEST_TOKEN_VAR = "TEST_BOT_TOKEN";
     public static final String ENV_MODE_VAR = "BOT_ENV";
+    public static final String DB_PATH_VAR = "DB_PATH";
 
     public static final Permissions REQUIRED_PERMS =
         new PermissionsBuilder()

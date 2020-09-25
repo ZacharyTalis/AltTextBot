@@ -1,5 +1,7 @@
 package com.zacharytalis.alttextbot.utils.config;
 
+import com.zacharytalis.alttextbot.utils.Ref;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,5 +21,10 @@ public abstract class ConfigBase implements Config {
 
     String require(String name) throws ConfigurationException {
         return fetch(name).orElseThrow(() -> new ConfigurationException("{} not found in environment", name));
+    }
+
+    @Override
+    public String getDbPath() throws ConfigurationException {
+        return require(Ref.DB_PATH_VAR);
     }
 }

@@ -5,5 +5,7 @@ import com.zacharytalis.alttextbot.utils.Ref;
 public interface Config {
     String getToken() throws ConfigurationException;
 
+    String getDbPath() throws ConfigurationException;
+
     Ref.EnvType getEnv();
 }
