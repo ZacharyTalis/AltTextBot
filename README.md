@@ -28,5 +28,7 @@ This bot utilizes Discord's blocked user functionality to create collapsible alt
   - Get all commands from AltTextBot in a direct message.
 - `!atbping`
   - Check to see if AltTextBot is alive.
+- `!atbboard`
+  - Display the server's top alt-texters.
 - `!alt <alt-text>`
   - Replace the user message with alt-text.
