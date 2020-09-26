@@ -1,7 +1,7 @@
 package com.zacharytalis.alttextbot.commands.impl;
 
 import com.zacharytalis.alttextbot.board.Board;
-import com.zacharytalis.alttextbot.board.BoardManager;
+import com.zacharytalis.alttextbot.board.BoardUtils;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.commands.BaseCommandBody;
 import com.zacharytalis.alttextbot.commands.CommandInfo;
@@ -29,11 +29,15 @@ public class BoardCommand extends BaseCommandBody {
     @Override
     protected void call(CommandMessage msg) {
 
-        // Get the new leaderboard info to display.
-        Board board = BoardManager.newBoardByMsg(msg);
+        // Get the new leaderboard info to display
+        Board board = BoardUtils.newBoardByMsg(msg);
 
-        // Send the embed message.
-        msg.getChannel().sendMessage(board.getEmbedBuilder(msg.getServer()));
+        // Send the embed message
+        msg.getChannel().sendMessage(board.getEmbedBuilder());
+
+        // Free up memory
+        // noinspection UnusedAssignment
+        board = null;
     }
 }
 

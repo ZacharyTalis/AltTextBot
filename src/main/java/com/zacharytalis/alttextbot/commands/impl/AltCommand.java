@@ -9,6 +9,8 @@ import com.zacharytalis.alttextbot.utils.MessageAuthorInfo;
 import com.zacharytalis.alttextbot.utils.Messages;
 import org.javacord.api.entity.message.MessageBuilder;
 
+import java.util.Objects;
+
 import static com.zacharytalis.alttextbot.utils.functions.Functions.partial;
 
 public class AltCommand extends BaseCommandBody {
@@ -42,7 +44,8 @@ public class AltCommand extends BaseCommandBody {
                    .exceptionally(
                        partial(this::handleDeletionFailure, recv)
                    );
-               new BoardServerFile(recv.getServerID()).incrementUserScore(recv.getUserAuthor().get().getId());
+               new BoardServerFile(recv.getServerID(),
+                       Objects.requireNonNull(recv.getUserAuthor().orElse(null)).getId());
             })
             .exceptionallyAsync(
                 partial(this::handleSendFailure, recv)
@@ -62,17 +65,15 @@ public class AltCommand extends BaseCommandBody {
         logger().error(t, "Failed to delete message. {}", recv);
 
         author.asUser().ifPresent(
-            user -> {
-                new MessageBuilder()
-                    .append("Sorry ")
-                    .append(user.getMentionTag())
-                    .append(", I could not delete your !alt message in ")
-                    .append(Messages.getNameOrElse(recv::getServerTextChannel, "a channel"))
-                    .append(" in ")
-                    .append(Messages.getNameOrElse(recv::getServer, "a server"))
-                    .append("! Do I have the right permissions?")
-                    .send(user);
-            }
+            user -> new MessageBuilder()
+                .append("Sorry ")
+                .append(user.getMentionTag())
+                .append(", I could not delete your !alt message in ")
+                .append(Messages.getNameOrElse(recv::getServerTextChannel, "a channel"))
+                .append(" in ")
+                .append(Messages.getNameOrElse(recv::getServer, "a server"))
+                .append("! Do I have the right permissions?")
+                .send(user)
         );
     }
 
@@ -82,24 +83,21 @@ public class AltCommand extends BaseCommandBody {
         logger().error(t, "Failed to send alt text message. {}", recv);
 
         author.asUser().ifPresentOrElse(
-            user -> {
-                new MessageBuilder()
-                    .append("Sorry ")
-                    .append(user.getMentionTag())
-                    .append(", I could not send your !alt message in ")
-                    .append(Messages.getNameOrElse(recv::getServerTextChannel, "a channel"))
-                    .append(" in ")
-                    .append(Messages.getNameOrElse(recv::getServer, "a server"))
-                    .append("! Do I have the right permissions?")
-                    .send(user);
-            },
-            () -> {
-                new MessageBuilder()
-                    .append("Sorry ")
-                    .append(author.getDisplayName())
-                    .append(", I could not send your !alt message! Do I have the right permissions?")
-                    .send(recv.getChannel());
-            }
+            user -> new MessageBuilder()
+                .append("Sorry ")
+                .append(user.getMentionTag())
+                .append(", I could not send your !alt message in ")
+                .append(Messages.getNameOrElse(recv::getServerTextChannel, "a channel"))
+                .append(" in ")
+                .append(Messages.getNameOrElse(recv::getServer, "a server"))
+                .append("! Do I have the right permissions?")
+                .send(user),
+
+            () -> new MessageBuilder()
+                .append("Sorry ")
+                .append(author.getDisplayName())
+                .append(", I could not send your !alt message! Do I have the right permissions?")
+                .send(recv.getChannel())
         );
     }
 }

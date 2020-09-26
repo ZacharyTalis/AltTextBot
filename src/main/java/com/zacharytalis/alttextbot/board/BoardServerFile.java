@@ -1,6 +1,7 @@
 package com.zacharytalis.alttextbot.board;
 
 import com.zacharytalis.alttextbot.utils.Toolbox;
+
 import java.io.*;
 import java.util.HashMap;
 
@@ -18,6 +19,7 @@ public class BoardServerFile implements Serializable {
         serializeThis();
     }
 
+    @SuppressWarnings({"unused", "RedundantSuppression"})
     public BoardServerFile(Long serverID, Long userID) {
         this.serverID = serverID;
         readAnyExistingFile();
@@ -25,6 +27,7 @@ public class BoardServerFile implements Serializable {
         serializeThis();
     }
 
+    @SuppressWarnings({"unused", "RedundantSuppression"})
     public BoardServerFile(Long serverID, Long userID, Integer userScore) {
         this.serverID = serverID;
         readAnyExistingFile();
@@ -34,8 +37,8 @@ public class BoardServerFile implements Serializable {
 
     private void readAnyExistingFile() {
         try {
-            if (new File(BoardManager.generateDBPath(serverID)).exists()) {
-                FileInputStream fileInputStream = new FileInputStream(BoardManager.generateDBPath(serverID));
+            if (new File(BoardUtils.generateDBPath(serverID)).exists()) {
+                FileInputStream fileInputStream = new FileInputStream(BoardUtils.generateDBPath(serverID));
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 BoardServerFile readObject = (BoardServerFile) objectInputStream.readObject();
                 fileInputStream.close();  objectInputStream.close();
@@ -69,7 +72,7 @@ public class BoardServerFile implements Serializable {
 
     public void serializeThis() {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(BoardManager.generateDBPath(serverID));
+            FileOutputStream fileOutputStream = new FileOutputStream(BoardUtils.generateDBPath(serverID));
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(this);
             fileOutputStream.close();  objectOutputStream.close();
