@@ -12,7 +12,7 @@
         <file>${LOG_PATH}/app.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>alttextbot-%d.%i.log</fileNamePattern>
-            <maxFileSize>100MB</maxFileSize>
+            <maxFileSize>100KB</maxFileSize>
             <maxHistory>60</maxHistory>
             <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>
