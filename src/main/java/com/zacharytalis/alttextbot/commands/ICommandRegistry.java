@@ -2,7 +2,7 @@ package com.zacharytalis.alttextbot.commands;
 
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
-import com.zacharytalis.alttextbot.utils.Messages;
+import com.zacharytalis.alttextbot.utils.DiscordEntities;
 import com.zacharytalis.alttextbot.utils.ReadOnly;
 import org.javacord.api.entity.message.Message;
 
@@ -55,7 +55,7 @@ public interface ICommandRegistry<T extends ICommandRegistry<T>> extends Map<Str
     }
 
     default CommandInfo get(Message msg) {
-        return get(Messages.asCommandMessage(msg));
+        return get(DiscordEntities.asCommandMessage(msg));
     }
 
     default boolean containsKey(CommandMessage key) {
@@ -63,6 +63,6 @@ public interface ICommandRegistry<T extends ICommandRegistry<T>> extends Map<Str
     }
 
     default boolean containsKey(Message key) {
-        return containsKey(Messages.asCommandMessage(key));
+        return containsKey(DiscordEntities.asCommandMessage(key));
     }
 }

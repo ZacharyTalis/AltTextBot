@@ -5,8 +5,8 @@ import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.commands.BaseCommandBody;
 import com.zacharytalis.alttextbot.commands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
+import com.zacharytalis.alttextbot.utils.DiscordEntities;
 import com.zacharytalis.alttextbot.utils.MessageAuthorInfo;
-import com.zacharytalis.alttextbot.utils.Messages;
 import org.javacord.api.entity.message.MessageBuilder;
 
 import java.util.Objects;
@@ -69,9 +69,9 @@ public class AltCommand extends BaseCommandBody {
                 .append("Sorry ")
                 .append(user.getMentionTag())
                 .append(", I could not delete your !alt message in ")
-                .append(Messages.getNameOrElse(recv::getServerTextChannel, "a channel"))
+                .append(DiscordEntities.getNameOrElse(recv::getServerTextChannel, "a channel"))
                 .append(" in ")
-                .append(Messages.getNameOrElse(recv::getServer, "a server"))
+                .append(DiscordEntities.getNameOrElse(recv::getServer, "a server"))
                 .append("! Do I have the right permissions?")
                 .send(user)
         );
@@ -87,9 +87,9 @@ public class AltCommand extends BaseCommandBody {
                 .append("Sorry ")
                 .append(user.getMentionTag())
                 .append(", I could not send your !alt message in ")
-                .append(Messages.getNameOrElse(recv::getServerTextChannel, "a channel"))
+                .append(DiscordEntities.getNameOrElse(recv::getServerTextChannel, "a channel"))
                 .append(" in ")
-                .append(Messages.getNameOrElse(recv::getServer, "a server"))
+                .append(DiscordEntities.getNameOrElse(recv::getServer, "a server"))
                 .append("! Do I have the right permissions?")
                 .send(user),
 

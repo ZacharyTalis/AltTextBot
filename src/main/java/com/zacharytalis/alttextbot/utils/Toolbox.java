@@ -8,6 +8,7 @@ import com.zacharytalis.alttextbot.utils.functions.Runnables;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
 
+import java.lang.invoke.MethodHandle;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -19,6 +20,22 @@ public class Toolbox {
 
         public Class<?> getCallingClass() {
             return getClassContext()[OFFSET + 1];
+        }
+    }
+
+    public static class PerEnvBuilder {
+
+        public PerEnvBuilder inTesting(Runnable run) {
+            if (Ref.currentEnv().isTesting())
+                run.run();
+
+            return this;
+        }
+
+        public PerEnvBuilder inProduction(Runnable run) {
+            if (Ref.currentEnv().isProduction())
+                run.run();
+            return this;
         }
     }
 
@@ -119,9 +136,13 @@ public class Toolbox {
         }
     }
 
-    public static void testOnly(Runnable run) {
+    public static void testingOnly(Runnable run) {
         if (Ref.currentEnv().isTesting()) {
             run.run();
         }
+    }
+
+    public static PerEnvBuilder perEnv() {
+        return new PerEnvBuilder();
     }
 }

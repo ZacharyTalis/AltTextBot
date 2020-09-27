@@ -93,13 +93,40 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
         // Listen for *any* commands
         api.addMessageCreateListener(event -> {
             final var msg = new CommandMessage(event.getMessage());
+            final var author = msg.getAuthorInfo();
 
             logger.testingOnly().info("Message received: {}", msg);
 
-            if(!msg.getAuthorInfo().isYourself() && commands.containsKey(msg))
+            if(!author.isYourself() && commands.containsKey(msg))
                 commands.prepareCommand(msg.getCommandPrefix(), AltTextBot.this).executeAsync(msg);
-            else
-                logger.testingOnly().info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsKey(msg));
+            else {
+                Toolbox
+                    .perEnv()
+                    .inTesting(() -> logger.info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsKey(msg)))
+                    .inProduction(() -> {
+                        if (msg.isCommandLike())
+                            logger.warn("Ignoring command-like message becuase it is either self or invalid. prefix: {}, is_self: {}", msg.getCommandPrefix(), author.isYourself());
+                    })
+                ;
+            }
+        });
+
+        api.addServerJoinListener(event -> {
+            final var switcher = Toolbox.perEnv();
+            final var serverId = event.getServer().getIdAsString();
+            final var serverName = event.getServer().getName();
+
+            switcher.inTesting(() -> logger.info("{} joined server: {} [{}]", internalName(), serverName, serverId));
+            switcher.inProduction(() -> logger.info("{} joined server: {}", internalName(), serverId));
+        });
+
+        api.addServerLeaveListener(event -> {
+            final var switcher = Toolbox.perEnv();
+            final var serverId = event.getServer().getIdAsString();
+            final var serverName = event.getServer().getName();
+
+            switcher.inTesting(() -> logger.info("{} left server: {} [{}]", internalName(), serverName, serverId));
+            switcher.inProduction(() -> logger.info("{} left server: {}", internalName(), serverId));
         });
     }
 }

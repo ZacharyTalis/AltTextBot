@@ -46,7 +46,7 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
         final var matcher = PREFIX_PATTERN.matcher(content);
         final var success = matcher.lookingAt();
 
-        Toolbox.testOnly(() -> {
+        Toolbox.testingOnly(() -> {
             Toolbox.getLogger(CommandMessage.class).debug(
                 "success: {}, prefix_group: {}, {}",
                 success,
@@ -56,6 +56,10 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
         });
 
         return success ? matcher.group(PREFIX_GROUP) : content;
+    }
+
+    public boolean isCommandLike() {
+        return CharMatcher.anyOf("!?").matches(getContent().charAt(0));
     }
 
     public MessageAuthorInfo getAuthorInfo() {
@@ -69,8 +73,8 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     @Override
     public String toLoggerString() {
         final var author = getAuthorInfo();
-        final var channel = Messages.getNamedIdentifierOrElse(this::getServerTextChannel, "unknown");
-        final var server = Messages.getNamedIdentifierOrElse(this::getServer, "unknown");
+        final var channel = DiscordEntities.getNamedIdentifierOrElse(this::getServerTextChannel, "unknown");
+        final var server = DiscordEntities.getNamedIdentifierOrElse(this::getServer, "unknown");
 
         var arguments = new Object[] { getIdAsString(), author, server, channel };
         var logFormat = "id: {}, {}, server: {}, channel: {}";
