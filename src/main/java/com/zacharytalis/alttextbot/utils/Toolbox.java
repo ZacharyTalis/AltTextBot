@@ -8,7 +8,6 @@ import com.zacharytalis.alttextbot.utils.functions.Runnables;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
 
-import java.lang.invoke.MethodHandle;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;

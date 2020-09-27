@@ -30,7 +30,7 @@ public class Functions {
         return u -> fn.apply(arg, u);
     }
 
-    public static <T, U> Function<U, Void> partial(BiConsumer<T, U> fn, T arg) {
+    public static <T, U, R> Function<U, R> partial(BiConsumer<T, U> fn, T arg) {
         return u -> {
             fn.accept(arg, u);
             return null;

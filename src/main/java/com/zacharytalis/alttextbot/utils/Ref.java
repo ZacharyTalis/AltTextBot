@@ -1,10 +1,25 @@
 package com.zacharytalis.alttextbot.utils;
 
+import com.google.common.collect.ImmutableList;
+import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.permission.PermissionType;
 import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.permission.PermissionsBuilder;
+import org.javacord.api.entity.user.User;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class Ref {
+    public record ProjectAuthor(String name, Long discordId) {
+        public record ProjectAuthorWithUser(String name, Long discordId, User user) {
+        }
+
+        public CompletableFuture<ProjectAuthorWithUser> withUser(DiscordApi api) {
+            return api.getUserById(discordId).thenApply(user -> new ProjectAuthorWithUser(name, discordId, user));
+        }
+    }
+
     public enum EnvType {
         TESTING {
             @Override
@@ -51,6 +66,15 @@ public class Ref {
     public static final String TEST_TOKEN_VAR = "TEST_BOT_TOKEN";
     public static final String ENV_MODE_VAR = "BOT_ENV";
     public static final String DB_PATH_VAR = "DB_PATH";
+    public static final String BOT_VERSION_VAR = "BOT_VERSION";
+
+    public static final String GITHUB_REPO = "https://github.com/ZacharyTalis/AltTextBot";
+    public static final List<ProjectAuthor> authors = ImmutableList.of(
+        new ProjectAuthor("Glossawy", 95658742418247680L),
+        new ProjectAuthor("Zachary Talis", 133066971867643904L)
+    );
+
+    public static final String BOT_VERSION = System.getenv().getOrDefault(BOT_VERSION_VAR, "unkown (dev)");
 
     public static final Permissions REQUIRED_PERMS =
         new PermissionsBuilder()

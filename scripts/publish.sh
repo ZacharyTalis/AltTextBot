@@ -21,7 +21,7 @@ record() {
 
 record ./gradlew assemble
 
-record docker build -t alt-text-bot .
+record docker build -t alt-text-bot --build-arg version="$version" .
 record docker tag alt-text-bot glossawy/alt-text-bot:"$version"
 record docker tag alt-text-bot glossawy/alt-text-bot:current
 
