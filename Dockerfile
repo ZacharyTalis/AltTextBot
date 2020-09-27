@@ -3,7 +3,7 @@ MAINTAINER glossawy
 
 ARG version
 
-COPY ./build/libs /app
+COPY ./ /app
 RUN apk add bash
 RUN chmod +x /app/entrypoint.sh
 
