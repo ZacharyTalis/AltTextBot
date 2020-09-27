@@ -4,8 +4,10 @@ import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.commands.BaseCommandBody;
 import com.zacharytalis.alttextbot.commands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
+import com.zacharytalis.alttextbot.utils.Ref;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.MessageDecoration;
 
 public class HelpCommand extends BaseCommandBody {
     public static CommandInfo description() {
@@ -34,7 +36,13 @@ public class HelpCommand extends BaseCommandBody {
                 .values()
                 .stream()
                 .reduce(
-                    new MessageBuilder(),
+                    new MessageBuilder()
+                        .append("Commands available for ")
+                        .append(bot().internalName() + " v" + Ref.BOT_VERSION, MessageDecoration.BOLD)
+                        .append(":")
+                        .appendNewLine()
+                        .append("------------", MessageDecoration.BOLD)
+                        .appendNewLine(),
                     (var mb, var cmd) -> mb.append(cmd.name()).append(" ~ ").append(cmd.helpInfo()).appendNewLine(),
                     MessageBuilder::append
                 );
