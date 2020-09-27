@@ -1,7 +1,6 @@
 # AltTextBot
 
-<!--suppress CheckImageSize -->
-<img src="src/main/resources/logo.png" width="200px" alt="AltTextBot logo.">
+![AltTextBot logo.](src/main/resources/logo_circle-200px.png)
 
 **[Add AltTextBot to your server!](https://discord.com/oauth2/authorize?client_id=748589442549284865&scope=bot&permissions=11264)**
 
