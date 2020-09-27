@@ -2,10 +2,7 @@ package com.zacharytalis.alttextbot;
 
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.commands.CommandRegistry;
-import com.zacharytalis.alttextbot.commands.impl.AltCommand;
-import com.zacharytalis.alttextbot.commands.impl.BoardCommand;
-import com.zacharytalis.alttextbot.commands.impl.HelpCommand;
-import com.zacharytalis.alttextbot.commands.impl.PingCommand;
+import com.zacharytalis.alttextbot.commands.impl.*;
 import com.zacharytalis.alttextbot.exceptions.InvalidEnvironmentException;
 import com.zacharytalis.alttextbot.logging.Logger;
 import com.zacharytalis.alttextbot.utils.Configs;
@@ -23,6 +20,7 @@ public class EntryPoint {
         cmds.register(
             HelpCommand.description(),
             PingCommand.description(),
+            AboutCommand.description(),
             BoardCommand.description(),
             AltCommand.description()
         );
