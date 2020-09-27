@@ -23,8 +23,8 @@ public class EntryPoint {
         cmds.register(
             HelpCommand.description(),
             PingCommand.description(),
-            AltCommand.description(),
-            BoardCommand.description()
+            BoardCommand.description(),
+            AltCommand.description()
         );
 
         logger.info("Starting Alt Text Bot");
