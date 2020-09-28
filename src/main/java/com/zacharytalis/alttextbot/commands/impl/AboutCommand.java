@@ -14,7 +14,7 @@ public class AboutCommand extends BaseCommandBody {
     public static CommandInfo description() {
         return new CommandInfo(
             "!atbabout",
-            "Get some information about alt text bot",
+            "Get AltTextBot's version and authorship info about in a direct message.",
             AboutCommand::new
         );
     }

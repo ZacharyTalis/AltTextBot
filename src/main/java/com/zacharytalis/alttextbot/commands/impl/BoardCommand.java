@@ -12,7 +12,7 @@ public class BoardCommand extends BaseCommandBody {
     public static CommandInfo description() {
         return new CommandInfo(
             "!atbboard",
-            "Post the AltTextBot leaderboard for this server.",
+            "Display the current server's top alt-texters.",
             BoardCommand::new
         );
     }
@@ -40,4 +40,3 @@ public class BoardCommand extends BaseCommandBody {
         board = null;
     }
 }
-
