@@ -19,7 +19,7 @@ public class Board {
 
     BoardServerFile boardServerFile;
     EmbedBuilder embedBuilder;
-    final int MAXPLACES = 5;
+    static final int MAXPLACES = 5;
 
     public Board(BoardServerFile boardServerFile, Server server) {
         this.boardServerFile = boardServerFile;
@@ -38,7 +38,8 @@ public class Board {
         int scoreListIndex = 0;
         ArrayList<Integer> scorePrintList = new ArrayList<>(MAXPLACES);
 
-        AtomicReference<ArrayList<List<String>>> userList = new AtomicReference<>(new ArrayList<>(MAXPLACES));
+        AtomicReference<ArrayList<List<String>>> userList = new AtomicReference<>
+                (new ArrayList<>(MAXPLACES));
 
         for (int i = 0; i < MAXPLACES; i++) {
             userList.get().add(new LinkedList<>());
@@ -72,7 +73,7 @@ public class Board {
                 userList.get().get(userListIndex)
                         .add(BoardUtils.getDisplayNameFromID(server, scoreList.get(scoreListIndex).getKey()));
                 whichScore = scoreList.get(scoreListIndex).getValue();
-                scorePrintList.add(scoreListIndex, whichScore);
+                scorePrintList.add(userListIndex, whichScore);
             }
 
             // adding another user to userList would exceed capacity, so end while loop

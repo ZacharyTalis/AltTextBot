@@ -44,7 +44,7 @@ public class BoardUtils {
     }
 
     public static String getDisplayNameFromID(Server server, Long userID) {
-        return server.getDisplayName(server.getMemberById(userID).orElse(null));
+        return server.getMemberById(userID).map(server::getDisplayName).orElse("*Member left*");
     }
 
 }
