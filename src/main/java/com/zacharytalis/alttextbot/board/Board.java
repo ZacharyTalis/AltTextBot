@@ -92,14 +92,14 @@ public class Board {
 
         EmbedBuilder embedBuilder = new EmbedBuilder().setTitle("This server's top alt-texters...");
         int i = 0;
-        while (!userPrintList.get(i).equals("")) {
+        while (i < MAXPLACES && !userPrintList.get(i).equals("")) {
 
             // useful when a placing user has submitted only a single alt-text
             String altString;
             if (scorePrintList.get(i) == 1) altString = " alt-text**";
             else altString = " alt-texts**";
 
-            embedBuilder.addField(fieldNames[Math.min(i, MAXPLACES-1)],
+            embedBuilder.addField(fieldNames[i],
                     userPrintList.get(i) + " ~ **" + scorePrintList.get(i) + altString, false);
             i++;
 
