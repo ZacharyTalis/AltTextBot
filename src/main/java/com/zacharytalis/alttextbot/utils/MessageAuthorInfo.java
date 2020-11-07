@@ -78,4 +78,9 @@ public record MessageAuthorInfo(MessageAuthor author) implements MessageAuthor, 
             toYesNo(isYourself())
         );
     }
+
+    @Override
+    public Optional<User> asUser() {
+        return author.asUser();
+    }
 }
