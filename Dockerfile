@@ -13,7 +13,4 @@ ENV LOG_PATH=/app/logs
 ENV DB_PATH=/app/db
 ENV BOT_VERSION=${version}
 
-VOLUME /app/logs
-VOLUME /app/db
-
 CMD /app/entrypoint.sh
