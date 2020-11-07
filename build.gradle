@@ -24,6 +24,10 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
+task cleanSetupFiles(type: Delete) {
+    delete "${buildDir}/libs/lib"
+}
+
 task copyToLib(type: Copy) {
     into "${buildDir}/libs/lib"
     from configurations.runtimeClasspath
@@ -42,10 +46,12 @@ task zipBuild(type: Zip) {
     destinationDir(file("${buildDir}/distributions/"))
 }
 
+tasks.copyToLib.shouldRunAfter(tasks.cleanSetupFiles)
 tasks.copySetupFiles.shouldRunAfter(tasks.copyToLib)
 tasks.zipBuild.shouldRunAfter(tasks.copySetupFiles)
 
 jar {
+    dependsOn cleanSetupFiles
     dependsOn copyToLib
     dependsOn copySetupFiles
     dependsOn zipBuild
