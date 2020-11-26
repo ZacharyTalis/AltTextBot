@@ -8,11 +8,18 @@ import com.zacharytalis.alttextbot.utils.config.ConfigurationException;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.intent.Intent;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class AltTextBot implements DiscordBot<AltTextBot> {
+    public static final Intent[] INTENTS = new Intent[]{
+        Intent.GUILDS,
+        Intent.GUILD_MESSAGES,
+        Intent.GUILD_MEMBERS,
+    };
+
     private static final Logger logger = Toolbox.inferLogger();
 
     private final CommandRegistry commands;
@@ -28,7 +35,8 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
 
         this.apiBuilder =
             new DiscordApiBuilder()
-                .setToken(config.getToken());
+                .setToken(config.getToken())
+                .setIntents(AltTextBot.INTENTS);
     }
 
     @Override
