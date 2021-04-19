@@ -31,7 +31,5 @@ This bot utilizes Discord's blocked user functionality to create collapsible alt
   - Get AltTextBot's version and authorship info in a direct message.
 - `!atbboard`
   - Display the current server's top alt-texters.
-- `!alt <alt-text>`
-  - Replace the user message with alt-text.
 
 ![AltTextBot displaying a top-five leaderboard embed of alt-text contributors. The ranks are signified by various emojis.](src/main/resources/leaderboard_screenshot.png)
