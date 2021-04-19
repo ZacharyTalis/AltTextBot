@@ -1,8 +1,8 @@
 # AltTextBot
 
-![AltTextBot logo.](src/main/resources/logo_circle-200px.png)
+![AltTextBot logo, the lowercase letters a and t within a circle representing the @ symbol.](src/main/resources/logo_circle-200px.png)
 
-**[Add AltTextBot to your server!](https://discord.com/oauth2/authorize?client_id=748589442549284865&scope=bot&permissions=11264)**
+**[Add AltTextBot to your server!](https://discord.com/oauth2/authorize?client_id=748589442549284865&scope=bot&permissions=11264)** - [View official website](https://zacharytalis.com/blog/atb/)
 
 ## About
 
@@ -28,8 +28,10 @@ This bot utilizes Discord's blocked user functionality to create collapsible alt
 - `!atbping`
   - Check to see if AltTextBot is alive.
 - `!atbabout`
-  - Get AltTextBot's version and authorship info about in a direct message.
+  - Get AltTextBot's version and authorship info in a direct message.
 - `!atbboard`
   - Display the current server's top alt-texters.
 - `!alt <alt-text>`
   - Replace the user message with alt-text.
+
+![AltTextBot displaying a top-five leaderboard embed of alt-text contributors. The ranks are signified by various emojis.](src/main/resources/leaderboard_screenshot.png)
