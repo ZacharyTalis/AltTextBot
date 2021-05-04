@@ -2,7 +2,7 @@
 
 ![AltTextBot logo, the lowercase letters a and t within a circle representing the @ symbol.](src/main/resources/logo_circle-200px.png)
 
-**[Add AltTextBot to your server!](https://discord.com/oauth2/authorize?client_id=748589442549284865&scope=bot&permissions=11264)** - [View official website](https://zacharytalis.com/blog/atb/)
+**[Add AltTextBot to your server!](https://discord.com/oauth2/authorize?client_id=748589442549284865&scope=bot&permissions=11264)** - [Official website](https://zacharytalis.com/blog/atb/) - [Docker image](https://hub.docker.com/r/glossawy/alt-text-bot)
 
 ## About
 
