@@ -4,6 +4,12 @@
 
 **[Add AltTextBot to your server!](https://discord.com/oauth2/authorize?client_id=748589442549284865&scope=bot&permissions=11264)** - [Official website](https://zacharytalis.com/blog/atb/) - [Docker image](https://hub.docker.com/r/glossawy/alt-text-bot)
 
+## Tentative deprecation notice
+
+In Q3 of this year, [Discord plans to](https://github.com/discord/discord-api-docs/issues/2508#issuecomment-871904226) debut their own alt-text functionality! Depending on the robustness of this functionality, AltTextBot may or may not continute to operate.
+
+**If we determine that Discord's implementation of alt-text is versatile enough, we're shutting down AltTextBot, though the source code will remain available.**
+
 ## About
 
 AltTextBot is a [Javacord](https://github.com/Javacord/Javacord) bot for Discord, designed to reduce message clutter associated with image alt-text.
