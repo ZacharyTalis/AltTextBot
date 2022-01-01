@@ -1,4 +1,4 @@
-FROM openjdk:14-alpine
+FROM openjdk:17-alpine
 MAINTAINER glossawy
 
 ARG version
