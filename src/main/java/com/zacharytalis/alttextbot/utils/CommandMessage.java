@@ -46,17 +46,18 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
         final var content = getContent();
         final var matcher = PREFIX_PATTERN.matcher(content);
         final var success = matcher.lookingAt();
+        final Optional<String> result = success ? Optional.of(matcher.group(PREFIX_GROUP)) : Optional.empty();
 
         Toolbox.testingOnly(() -> {
             Toolbox.getLogger(CommandMessage.class).debug(
                 "success: {}, prefix_group: {}, {}",
                 success,
-                success ? matcher.group(PREFIX_GROUP) : "null",
+                result.orElse("<none>"),
                 this
             );
         });
 
-        return success ? Optional.of(matcher.group(PREFIX_GROUP)) : Optional.empty();
+        return result;
     }
 
     public boolean isCommandLike() {

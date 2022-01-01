@@ -40,12 +40,12 @@ public class AltCommand extends BaseCommandBody {
         // not post anything which would be :(
         recv.getChannel().sendMessage(altText)
             .thenAcceptAsync(sentMsg -> {
-               recv.delete("Alt-text submission")
-                   .exceptionally(
-                       partial(this::handleDeletionFailure, recv)
-                   );
-               new BoardServerFile(recv.getServerID(),
-                       Objects.requireNonNull(recv.getUserAuthor().orElse(null)).getId());
+                recv.delete("Alt-text submission")
+                    .exceptionally(
+                        partial(this::handleDeletionFailure, recv)
+                    );
+                new BoardServerFile(recv.getServerID(),
+                        Objects.requireNonNull(recv.getUserAuthor().orElse(null)).getId());
             })
             .exceptionallyAsync(
                 partial(this::handleSendFailure, recv)
