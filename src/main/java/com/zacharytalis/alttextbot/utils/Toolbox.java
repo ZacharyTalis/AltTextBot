@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Toolbox {
     public record Caller(Class<?> callerClass) {
@@ -44,20 +45,44 @@ public class Toolbox {
         }
     }
 
-    public static class PerEnvBuilder {
+    public static abstract class PerEnvRunner {
+        private static final Supplier<PerEnvRunner> runnerFactory =
+                Ref.currentEnv().isProduction() ? ProdRunner::new : TestingRunner::new;
 
-        public PerEnvBuilder inTesting(Runnable run) {
-            if (Ref.currentEnv().isTesting())
-                run.run();
-
-            return this;
+        public static PerEnvRunner getInstance() {
+            return runnerFactory.get();
         }
 
-        public PerEnvBuilder inProduction(Runnable run) {
-            if (Ref.currentEnv().isProduction())
+        private static class ProdRunner extends PerEnvRunner {
+            @Override
+            public PerEnvRunner inTesting(Runnable run) {
+                // Do nothing in Testing
+                return this;
+            }
+
+            @Override
+            public PerEnvRunner inProduction(Runnable run) {
                 run.run();
-            return this;
+                return this;
+            }
         }
+
+        private static class TestingRunner extends PerEnvRunner {
+            @Override
+            public PerEnvRunner inTesting(Runnable run) {
+                run.run();
+                return this;
+            }
+
+            @Override
+            public PerEnvRunner inProduction(Runnable run) {
+                // Do nothing in Production
+                return this;
+            }
+        }
+
+        public abstract PerEnvRunner inTesting(Runnable run);
+        public abstract PerEnvRunner inProduction(Runnable run);
     }
 
     private static final HashMap<Class<?>, Logger> classLoggers = new HashMap<>();
@@ -161,7 +186,7 @@ public class Toolbox {
         }
     }
 
-    public static PerEnvBuilder perEnv() {
-        return new PerEnvBuilder();
+    public static PerEnvRunner perEnv() {
+        return PerEnvRunner.getInstance();
     }
 }
