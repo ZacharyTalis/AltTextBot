@@ -8,17 +8,39 @@ import com.zacharytalis.alttextbot.utils.functions.Runnables;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
 
+import javax.tools.Tool;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Toolbox {
-    private static class SecurityHelper extends SecurityManager {
-        static final int OFFSET = 1;
+    public record Caller(Class<?> callerClass) {
+        static class InferenceException extends RuntimeException {
+            InferenceException() {
+                super("Failed to perform caller inference");
+            }
+        }
 
-        public Class<?> getCallingClass() {
-            return getClassContext()[OFFSET + 1];
+        private static final List<Class<?>> EXCLUDE = List.of(Toolbox.class, Caller.class);
+
+        private static Caller infer() throws InferenceException {
+            final var walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+            final var callingClass =
+                    walker.walk(
+                            s -> s.map(StackWalker.StackFrame::getDeclaringClass)
+                                    .filter(Caller::isRelevantClass)
+                                    .findFirst()
+                    );
+
+            return callingClass.map(Caller::new).orElseThrow(InferenceException::new);
+        }
+
+        private static boolean isRelevantClass(Class<?> clazz) {
+            return !EXCLUDE.contains(clazz);
         }
     }
 
@@ -37,8 +59,6 @@ public class Toolbox {
             return this;
         }
     }
-
-    private static final SecurityHelper securityHelper = new SecurityHelper();
 
     private static final HashMap<Class<?>, Logger> classLoggers = new HashMap<>();
     private static final HashMap<String, Logger> namedLoggers = new HashMap<>();
@@ -103,8 +123,8 @@ public class Toolbox {
         return namedLoggers.computeIfAbsent(name, n -> new LoggableLogger(LoggerFactory.getLogger(n)));
     }
 
-    public static Logger inferLogger() {
-        return getLogger(securityHelper.getCallingClass());
+    public static Logger inferLogger() throws Toolbox.Caller.InferenceException {
+        return getLogger(Caller.infer().callerClass());
     }
 
     public static Logger getLogger(Class<?> clazz) {

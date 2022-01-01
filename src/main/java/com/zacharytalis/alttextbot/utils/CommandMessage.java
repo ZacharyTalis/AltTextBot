@@ -6,6 +6,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.emoji.CustomEmoji;
 import org.javacord.api.entity.message.*;
+import org.javacord.api.entity.message.component.HighLevelComponent;
 import org.javacord.api.entity.message.embed.Embed;
 import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.user.User;
@@ -158,6 +159,16 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     }
 
     @Override
+    public Optional<MessageReference> getMessageReference() {
+        return delegate.getMessageReference();
+    }
+
+    @Override
+    public Optional<Message> getReferencedMessage() {
+        return delegate.getReferencedMessage();
+    }
+
+    @Override
     public boolean isCachedForever() {
         return delegate.isCachedForever();
     }
@@ -173,6 +184,11 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     }
 
     @Override
+    public List<HighLevelComponent> getComponents() {
+        return delegate.getComponents();
+    }
+
+    @Override
     public List<User> getMentionedUsers() {
         return delegate.getMentionedUsers();
     }
@@ -180,6 +196,11 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     @Override
     public List<Role> getMentionedRoles() {
         return delegate.getMentionedRoles();
+    }
+
+    @Override
+    public Optional<String> getNonce() {
+        return delegate.getNonce();
     }
 
     @Override

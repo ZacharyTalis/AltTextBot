@@ -26,6 +26,7 @@ public class Futures {
         return CompletableFuture.supplyAsync(() -> Streams.stream(futures).map(CompletableFuture::join));
     }
 
+    @SafeVarargs
     public static <T> CompletableFuture<Stream<T>> allOf(CompletableFuture<T>... futures) {
         return allOf(List.of(futures));
     }
