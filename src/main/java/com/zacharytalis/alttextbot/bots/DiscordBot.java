@@ -1,7 +1,7 @@
 package com.zacharytalis.alttextbot.bots;
 
-import com.zacharytalis.alttextbot.commands.CommandRegistry;
-import com.zacharytalis.alttextbot.utils.ReadOnly;
+import com.zacharytalis.alttextbot.commands.registry.CommandRegistry;
+import com.zacharytalis.alttextbot.commands.registry.ICommandRegistry;
 import com.zacharytalis.alttextbot.utils.config.Config;
 import org.javacord.api.DiscordApi;
 
@@ -15,7 +15,7 @@ public interface DiscordBot<T extends DiscordBot<T>> extends Runnable {
     String internalName();
 
     CompletableFuture<DiscordApi> api() throws NotStartedException;
-    ReadOnly<CommandRegistry> commands();
+    ICommandRegistry<CommandRegistry> commands();
 
     CompletableFuture<Void> whenApiAvailable(Consumer<DiscordApi> action) throws NotStartedException;
     Config config();

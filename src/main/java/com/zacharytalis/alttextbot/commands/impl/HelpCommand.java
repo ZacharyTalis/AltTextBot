@@ -32,7 +32,6 @@ public class HelpCommand extends BaseCommandBody {
         MessageBuilder helpText =
                 bot()
                 .commands()
-                .readOnly()
                 .values()
                 .stream()
                 .reduce(

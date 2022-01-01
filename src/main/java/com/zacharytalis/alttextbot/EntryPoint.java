@@ -1,7 +1,7 @@
 package com.zacharytalis.alttextbot;
 
 import com.zacharytalis.alttextbot.bots.AltTextBot;
-import com.zacharytalis.alttextbot.commands.CommandRegistry;
+import com.zacharytalis.alttextbot.commands.registry.CommandRegistry;
 import com.zacharytalis.alttextbot.commands.impl.*;
 import com.zacharytalis.alttextbot.exceptions.InvalidEnvironmentException;
 import com.zacharytalis.alttextbot.logging.Logger;

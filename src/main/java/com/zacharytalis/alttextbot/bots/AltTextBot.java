@@ -1,8 +1,12 @@
 package com.zacharytalis.alttextbot.bots;
 
-import com.zacharytalis.alttextbot.commands.CommandRegistry;
+import com.zacharytalis.alttextbot.commands.registry.CommandRegistry;
+import com.zacharytalis.alttextbot.commands.registry.ICommandRegistry;
 import com.zacharytalis.alttextbot.logging.Logger;
-import com.zacharytalis.alttextbot.utils.*;
+import com.zacharytalis.alttextbot.utils.CommandMessage;
+import com.zacharytalis.alttextbot.utils.Futures;
+import com.zacharytalis.alttextbot.utils.Ref;
+import com.zacharytalis.alttextbot.utils.Toolbox;
 import com.zacharytalis.alttextbot.utils.config.Config;
 import com.zacharytalis.alttextbot.utils.config.ConfigurationException;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
@@ -83,7 +87,7 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
     }
 
     @Override
-    public ReadOnly<CommandRegistry> commands() {
+    public ICommandRegistry<CommandRegistry> commands() {
         return this.commands.readOnly();
     }
 
@@ -105,12 +109,12 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
 
             logger.testingOnly().info("Message received: {}", msg);
 
-            if(!author.isYourself() && msg.isCommandLike() && commands.containsKey(msg))
-                commands.prepareCommand(msg.getCommandPrefix().orElseThrow(), AltTextBot.this).executeAsync(msg);
+            if(!author.isYourself() && commands.containsPrefix(msg))
+                commands.get(msg).orElseThrow().instantiate(AltTextBot.this).executeAsync(msg);
             else {
                 Toolbox
                     .perEnv()
-                    .inTesting(() -> logger.info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsKey(msg)))
+                    .inTesting(() -> logger.info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsPrefix(msg)))
                     .inProduction(() -> {
                         if (msg.isCommandLike())
                             logger.warn("Ignoring command-like message because it is either self or invalid. prefix: {}, is_self: {}", msg.getCommandPrefix(), author.isYourself());
