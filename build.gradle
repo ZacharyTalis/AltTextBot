@@ -47,7 +47,7 @@ task copyToLib(type: Copy) {
 
 task copySetupFiles(type: Copy) {
     into "${buildDir}/libs"
-    from ("${rootDir}/.env", "${rootDir}/entrypoint.sh")
+    from ("${rootDir}/entrypoint.sh")
 }
 
 task zipBuild(type: Zip) {
