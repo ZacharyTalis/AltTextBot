@@ -42,7 +42,7 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
         return delegate;
     }
 
-    public String getCommandPrefix() {
+    public Optional<String> getCommandPrefix() {
         final var content = getContent();
         final var matcher = PREFIX_PATTERN.matcher(content);
         final var success = matcher.lookingAt();
@@ -56,11 +56,11 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
             );
         });
 
-        return success ? matcher.group(PREFIX_GROUP) : content;
+        return success ? Optional.of(matcher.group(PREFIX_GROUP)) : Optional.empty();
     }
 
     public boolean isCommandLike() {
-        return CharMatcher.anyOf("!?").matches(getContent().charAt(0));
+        return getCommandPrefix().isPresent();
     }
 
     public MessageAuthorInfo getAuthorInfo() {

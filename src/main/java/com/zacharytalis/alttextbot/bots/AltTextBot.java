@@ -105,15 +105,15 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
 
             logger.testingOnly().info("Message received: {}", msg);
 
-            if(!author.isYourself() && commands.containsKey(msg))
-                commands.prepareCommand(msg.getCommandPrefix(), AltTextBot.this).executeAsync(msg);
+            if(!author.isYourself() && msg.isCommandLike() && commands.containsKey(msg))
+                commands.prepareCommand(msg.getCommandPrefix().orElseThrow(), AltTextBot.this).executeAsync(msg);
             else {
                 Toolbox
                     .perEnv()
                     .inTesting(() -> logger.info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsKey(msg)))
                     .inProduction(() -> {
                         if (msg.isCommandLike())
-                            logger.warn("Ignoring command-like message becuase it is either self or invalid. prefix: {}, is_self: {}", msg.getCommandPrefix(), author.isYourself());
+                            logger.warn("Ignoring command-like message because it is either self or invalid. prefix: {}, is_self: {}", msg.getCommandPrefix(), author.isYourself());
                     })
                 ;
             }
