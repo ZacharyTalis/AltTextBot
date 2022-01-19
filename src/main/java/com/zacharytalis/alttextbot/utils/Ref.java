@@ -66,6 +66,7 @@ public class Ref {
     public static final String TEST_TOKEN_VAR = "TEST_BOT_TOKEN";
     public static final String ENV_MODE_VAR = "BOT_ENV";
     public static final String DB_PATH_VAR = "DB_PATH";
+    public static final String DB_URL_VAR = "DB_URL";
     public static final String BOT_VERSION_VAR = "BOT_VERSION";
 
     public static final String GITHUB_REPO = "https://github.com/ZacharyTalis/AltTextBot";

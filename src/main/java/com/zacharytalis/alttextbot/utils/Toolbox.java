@@ -5,14 +5,12 @@ import com.zacharytalis.alttextbot.logging.LoggableLogger;
 import com.zacharytalis.alttextbot.logging.Logger;
 import com.zacharytalis.alttextbot.logging.PrefixingLogger;
 import com.zacharytalis.alttextbot.utils.functions.Runnables;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
 
-import javax.tools.Tool;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -28,7 +26,7 @@ public class Toolbox {
 
         private static final List<Class<?>> EXCLUDE = List.of(Toolbox.class, Caller.class);
 
-        private static Caller infer() throws InferenceException {
+        public static Caller infer() throws InferenceException {
             final var walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
             final var callingClass =
                     walker.walk(
@@ -133,6 +131,39 @@ public class Toolbox {
             uncheckedThrow(throwable);
             return null;
         };
+    }
+
+    @NotNull
+    public static <T> Supplier<T> unchecked(CheckedSupplier<T> r) {
+        return () -> {
+            try {
+                return r.get();
+            } catch (Throwable t) {
+                uncheckedThrow(t);
+
+                // unreachable
+                return null;
+            }
+        };
+    }
+
+    @NotNull
+    public static <T, R> Function<T, R> unchecked(CheckedFunction<T, R> fn) {
+        try {
+            return t -> {
+                try {
+                    return fn.apply(t);
+                } catch (Throwable e) {
+                    uncheckedThrow(e);
+                    return null;
+                }
+            };
+        } catch(Throwable t) {
+            uncheckedThrow(t);
+
+            // unreachable
+            return null;
+        }
     }
 
     public static void uncheckedThrow(Throwable t) {

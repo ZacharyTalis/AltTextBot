@@ -9,6 +9,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/dataSources.xml
+.idea/sqldialects.xml
 
 # Generated files
 .idea/**/contentModel.xml

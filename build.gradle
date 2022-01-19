@@ -5,11 +5,13 @@ buildscript {
 
     dependencies {
         classpath 'org.owasp:dependency-check-gradle:6.5.1'
+        classpath 'org.postgresql:postgresql:42.3.1'
     }
 }
 
 plugins {
     id 'java'
+    id 'org.flywaydb.flyway' version '8.4.1'
 }
 
 apply plugin: 'org.owasp.dependencycheck'
@@ -17,13 +19,30 @@ apply plugin: 'org.owasp.dependencycheck'
 group 'com.zacharytalis'
 version '1.0'
 
+var dbConnectionUrl = System.getenv('DB_URL')
+var jdbiVersion = '3.27.0'
 sourceCompatibility = 17
+
+flyway {
+    url = dbConnectionUrl
+    user = 'alttextbot-migrator'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    implementation 'org.postgresql:postgresql:42.3.1'
+
+    implementation "org.jdbi:jdbi3-core:${jdbiVersion}"
+    implementation "org.jdbi:jdbi3-sqlobject:${jdbiVersion}"
+    implementation "org.jdbi:jdbi3-guava:${jdbiVersion}"
+    implementation "org.jdbi:jdbi3-postgres:${jdbiVersion}"
+
+    implementation "com.zaxxer:HikariCP:5.0.1"
+    implementation "org.flywaydb:flyway-core:8.4.1"
+
     implementation 'org.javacord:javacord:3.3.2'
 
     implementation 'org.apache.logging.log4j:log4j-core:2.17.0'
@@ -51,11 +70,14 @@ task copySetupFiles(type: Copy) {
 }
 
 task zipBuild(type: Zip) {
+    dependsOn(copySetupFiles)
+    dependsOn(copyToLib)
+
     from "${buildDir}/libs/"
     include '*'
     include '*/*'
-    archiveName 'alt-text-bot.zip'
-    destinationDir(file("${buildDir}/distributions/"))
+    archiveFileName = 'alt-text-bot.zip'
+    destinationDirectory = file("${buildDir}/distributions/")
 }
 
 tasks.copyToLib.shouldRunAfter(tasks.cleanSetupFiles)
@@ -64,8 +86,6 @@ tasks.zipBuild.shouldRunAfter(tasks.copySetupFiles)
 
 jar {
     dependsOn cleanSetupFiles
-    dependsOn copyToLib
-    dependsOn copySetupFiles
     dependsOn zipBuild
 
     manifest {

@@ -1,6 +1,7 @@
 package com.zacharytalis.alttextbot.utils.config;
 
 import com.zacharytalis.alttextbot.utils.Ref;
+import org.jdbi.v3.core.Jdbi;
 
 import java.util.Map;
 import java.util.Optional;
@@ -26,5 +27,10 @@ public abstract class ConfigBase implements Config {
     @Override
     public String getDbPath() throws ConfigurationException {
         return require(Ref.DB_PATH_VAR);
+    }
+
+    @Override
+    public String getDbUrl() throws ConfigurationException {
+        return require(Ref.DB_URL_VAR);
     }
 }

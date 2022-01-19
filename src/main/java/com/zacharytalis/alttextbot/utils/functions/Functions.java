@@ -30,10 +30,18 @@ public class Functions {
         return u -> fn.apply(arg, u);
     }
 
-    public static <T, U, R> Function<U, R> partial(BiConsumer<T, U> fn, T arg) {
+    public static <T, U, R> Function<T, R> rpartial(BiFunction<T, U, R> fn, U arg) {
+        return t -> fn.apply(t, arg);
+    }
+
+    public static <T, U, R> Function<U, R> partialConsumer(BiConsumer<T, U> fn, T arg) {
         return u -> {
             fn.accept(arg, u);
             return null;
         };
+    }
+
+    public static <I, O> Consumer<I> toConsumer(Function<I, O> fn) {
+        return fn::apply;
     }
 }

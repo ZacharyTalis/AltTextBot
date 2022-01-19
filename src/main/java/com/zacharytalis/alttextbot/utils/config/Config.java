@@ -7,5 +7,7 @@ public interface Config {
 
     String getDbPath() throws ConfigurationException;
 
+    String getDbUrl() throws ConfigurationException;
+
     Ref.EnvType getEnv();
 }

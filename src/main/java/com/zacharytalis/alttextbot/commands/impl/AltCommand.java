@@ -1,17 +1,19 @@
 package com.zacharytalis.alttextbot.commands.impl;
 
-import com.zacharytalis.alttextbot.board.BoardServerFile;
+import com.zacharytalis.alttextbot.board.v2.AltTextContribution;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.commands.BaseCommandBody;
 import com.zacharytalis.alttextbot.commands.CommandInfo;
+import com.zacharytalis.alttextbot.db.ConnectionPool;
+import com.zacharytalis.alttextbot.db.dao.AltTextContributionDao;
+import com.zacharytalis.alttextbot.db.dao.ServerDao;
+import com.zacharytalis.alttextbot.db.dao.UserDao;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
 import com.zacharytalis.alttextbot.utils.DiscordEntities;
 import com.zacharytalis.alttextbot.utils.MessageAuthorInfo;
 import org.javacord.api.entity.message.MessageBuilder;
 
-import java.util.Objects;
-
-import static com.zacharytalis.alttextbot.utils.functions.Functions.partial;
+import static com.zacharytalis.alttextbot.utils.functions.Functions.partialConsumer;
 
 public class AltCommand extends BaseCommandBody {
     public static CommandInfo description() {
@@ -36,23 +38,42 @@ public class AltCommand extends BaseCommandBody {
     protected void call(CommandMessage recv) {
         final var altText = getAltContent(recv);
 
-        // Try sending message before deleting the users submission, otherwise we might delete their work *and*
-        // not post anything which would be :(
-        recv.getChannel().sendMessage(altText)
-            .thenAcceptAsync(sentMsg -> {
-                recv.delete("Alt-text submission")
-                    .exceptionally(
-                        partial(this::handleDeletionFailure, recv)
-                    );
-                new BoardServerFile(recv.getServerID(),
-                        Objects.requireNonNull(recv.getUserAuthor().orElse(null)).getId());
-            })
-            .exceptionallyAsync(
-                partial(this::handleSendFailure, recv)
-            );
+        // First, send alt-text submission
+        // After sending, attempt to increment score and delete simultaneously
 
-        // User submitted alt-text, so increment their score.
+        // Send
+        final var sendFuture =
+                recv.getChannel().sendMessage(altText);
+        sendFuture.exceptionally(partialConsumer(this::handleSendFailure, recv));
 
+        // Increment once sent successfully
+        sendFuture.thenRunAsync(() -> {
+            final var userDiscordId = recv.getUserAuthor().orElseThrow().getId();
+            final var serverDiscordId = recv.getServerID();
+
+            ConnectionPool.useHandle(handle -> {
+               final var ud = handle.attach(UserDao.class);
+               final var sd = handle.attach(ServerDao.class);
+               final var atcd = handle.attach(AltTextContributionDao.class);
+
+               final var user = ud.fetchOrCreate(userDiscordId);
+               final var server = sd.fetchOrCreate(serverDiscordId);
+               final var contrib = atcd.fetchOrCreate(user, server);
+               final var newScore = atcd.increment(contrib);
+
+               final var serverName = DiscordEntities.getNamedIdentifierOrElse(recv::getServer, "<unknown>");
+
+               logger().info(
+                   "({}) in {} incremented score from {} to {}",
+                   recv.getAuthorInfo(), serverName, contrib.score(), newScore.score()
+               );
+            });
+        }).exceptionally(partialConsumer(this::handleIncrementFailure, recv));
+
+        // Delete once sent successfully
+        sendFuture
+            .thenComposeAsync(sentMsg -> recv.delete("Alt-text submission"))
+            .exceptionally(partialConsumer(this::handleDeletionFailure, recv));
     }
 
     private String getAltContent(CommandMessage msg) {
@@ -78,7 +99,7 @@ public class AltCommand extends BaseCommandBody {
     }
 
     private void handleSendFailure(CommandMessage recv, Throwable t) {
-        var author = new MessageAuthorInfo(recv.getAuthor());
+        var author = recv.getAuthorInfo();
 
         logger().error(t, "Failed to send alt text message. {}", recv);
 
@@ -99,5 +120,9 @@ public class AltCommand extends BaseCommandBody {
                 .append(", I could not send your !alt message! Do I have the right permissions?")
                 .send(recv.getChannel())
         );
+    }
+
+    private void handleIncrementFailure(CommandMessage recv, Throwable t) {
+        logger().error(t, "Failed to increment score for alt-text. {}", recv);
     }
 }

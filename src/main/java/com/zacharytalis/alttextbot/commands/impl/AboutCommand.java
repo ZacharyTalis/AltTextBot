@@ -54,7 +54,7 @@ public class AboutCommand extends BaseCommandBody {
                     .append(Ref.GITHUB_REPO)
                     .append(".")
                     .send(msg.getChannel())
-                        .exceptionally(Functions.partial(this::handleSendFailure, msg));
+                        .exceptionally(Functions.partialConsumer(this::handleSendFailure, msg));
             });
         });
     }

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  * Created by BoardUtils each time a leaderboard is accessed.
  * This class gets passed to BoardCommand via BoardUtils.
  */
+@Deprecated
 public class Board {
 
     BoardServerFile boardServerFile;
