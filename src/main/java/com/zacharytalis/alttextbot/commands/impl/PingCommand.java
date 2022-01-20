@@ -30,11 +30,13 @@ public class PingCommand extends BaseCommandBody {
         msg.getUserAuthor().ifPresent(user -> {
             new MessageBuilder()
                 .append("Yes, yes, I'm here, ")
-                .append(user.getMentionTag())
+                .append(user)
                 .send(msg.getChannel())
-                .exceptionallyAsync(Functions.nullify(t -> {
-                    logger().error(t, "Failed to pong. {}", msg);
-                }));
+                .exceptionally(Functions.partialConsumer(this::handleSendFailed, msg));
         });
+    }
+
+    private void handleSendFailed(final CommandMessage msg, final Throwable t) {
+        logger().error(t, "Failed to pong. {}", msg);
     }
 }

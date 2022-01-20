@@ -7,7 +7,7 @@ import com.zacharytalis.alttextbot.utils.CommandMessage;
 import com.zacharytalis.alttextbot.utils.Ref;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.entity.message.MessageDecoration;
+import org.javacord.api.entity.user.User;
 
 public class HelpCommand extends BaseCommandBody {
     public static CommandInfo description() {
@@ -29,27 +29,35 @@ public class HelpCommand extends BaseCommandBody {
 
     @Override
     protected void call(CommandMessage msg) {
-        MessageBuilder helpText =
-                bot()
-                .commands()
-                .values()
-                .stream()
-                .reduce(
-                    new MessageBuilder()
-                        .append("Commands available for ")
-                        .append(bot().internalName() + " v" + Ref.BOT_VERSION, MessageDecoration.BOLD)
-                        .append(":")
-                        .appendNewLine()
-                        .append("------------", MessageDecoration.BOLD)
-                        .appendNewLine(),
-                    (var mb, var cmd) -> mb.append(cmd.name()).append(" ~ ").append(cmd.helpInfo()).appendNewLine(),
-                    MessageBuilder::append
-                );
+        msg.getUserAuthor().ifPresent(this::sendHelpText);
+    }
 
-        msg.getUserAuthor().map(helpText::send).ifPresent(msgFuture -> {
-            msgFuture.exceptionally(Functions.nullify(t -> {
-                logger().error(t, "Failed to send help text to user. {}", msg);
-            }));
-        });
+    private void sendHelpText(final User user) {
+        getHelpMessage()
+            .send(user)
+            .exceptionally(Functions.partialConsumer(this::handleSendFailed, user));
+    }
+
+    private MessageBuilder getHelpMessage() {
+        final var header = """
+        Commands available for **%s v%s**:
+        **------------**
+        """.formatted(bot().internalName(), Ref.BOT_VERSION);
+
+        final var mb = new MessageBuilder().append(header);
+
+        for(var cmd : bot().commands().values()) {
+            mb.append(asHelpLine(cmd));
+        }
+
+        return mb;
+    }
+
+    private String asHelpLine(final CommandInfo cmd) {
+        return "%s ~ %s".formatted(cmd.name(), cmd.helpInfo());
+    }
+
+    private void handleSendFailed(final User user, final Throwable t) {
+        logger().error(t, "Failed to send help text to user. {}", user.getDiscriminatedName());
     }
 }
