@@ -1,6 +1,7 @@
 package com.zacharytalis.alttextbot.utils;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Sets;
 import com.zacharytalis.alttextbot.logging.LoggableLogger;
 import com.zacharytalis.alttextbot.logging.Logger;
 import com.zacharytalis.alttextbot.logging.PrefixingLogger;
@@ -9,37 +10,48 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class Toolbox {
     public record Caller(Class<?> callerClass) {
-        static class InferenceException extends RuntimeException {
+        public static class InferenceException extends RuntimeException {
             InferenceException() {
                 super("Failed to perform caller inference");
             }
         }
 
-        private static final List<Class<?>> EXCLUDE = List.of(Toolbox.class, Caller.class);
+        private static final Set<Class<?>> EXCLUDE = Set.of(Toolbox.class, Caller.class);
 
-        public static Caller infer() throws InferenceException {
+        private static Caller infer(Class<?>... excluding) throws InferenceException {
+            final var irrelevantClasses = exclusions(excluding);
+            final var isRelevant = Predicate.<Class<?>>not(irrelevantClasses::contains);
+
             final var walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
             final var callingClass =
                     walker.walk(
-                            s -> s.map(StackWalker.StackFrame::getDeclaringClass)
-                                    .filter(Caller::isRelevantClass)
-                                    .findFirst()
+                        s -> s.map(StackWalker.StackFrame::getDeclaringClass).filter(isRelevant).findFirst()
                     );
 
             return callingClass.map(Caller::new).orElseThrow(InferenceException::new);
         }
 
-        private static boolean isRelevantClass(Class<?> clazz) {
-            return !EXCLUDE.contains(clazz);
+        public static Caller inferExcludingSelf() throws InferenceException {
+            final var self = infer().callerClass();
+            return infer(self);
+        }
+
+        private static Set<Class<?>> exclusions(Class<?>... excluding) {
+            final var excl = Sets.newHashSet(excluding);
+            excl.addAll(EXCLUDE);
+
+            return Collections.unmodifiableSet(excl);
         }
     }
 
