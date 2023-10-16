@@ -10,7 +10,7 @@ import org.javacord.api.entity.message.MessageBuilder;
 public class PingCommand extends BaseCommandBody {
     public static CommandInfo description() {
         return new CommandInfo(
-            "!atbping",
+            "atbping",
             "Check to see if AltTextBot is alive.",
             PingCommand::new
         );

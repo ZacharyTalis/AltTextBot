@@ -22,6 +22,7 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
         Intent.GUILDS,
         Intent.GUILD_MESSAGES,
         Intent.GUILD_MEMBERS,
+        Intent.MESSAGE_CONTENT,
     };
 
     private static final Logger logger = Toolbox.inferLogger();

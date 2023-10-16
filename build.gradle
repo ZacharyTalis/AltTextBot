@@ -20,8 +20,11 @@ group 'com.zacharytalis'
 version '1.0'
 
 var dbConnectionUrl = System.getenv('DB_URL')
-var jdbiVersion = '3.27.0'
-sourceCompatibility = 17
+var jdbiVersion = '3.41.3'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_20
+}
 
 flyway {
     url = dbConnectionUrl
@@ -35,7 +38,7 @@ repositories {
 dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
 
-    implementation 'org.postgresql:postgresql:42.3.1'
+    implementation 'org.postgresql:postgresql:42.3.8'
 
     implementation "org.jdbi:jdbi3-core:${jdbiVersion}"
     implementation "org.jdbi:jdbi3-sqlobject:${jdbiVersion}"
@@ -45,33 +48,34 @@ dependencies {
     implementation "com.zaxxer:HikariCP:5.0.1"
     implementation "org.flywaydb:flyway-core:8.4.1"
 
-    implementation 'org.javacord:javacord:3.3.2'
+    implementation 'org.javacord:javacord:3.8.0'
 
-    implementation 'org.apache.logging.log4j:log4j-core:2.17.0'
-    implementation 'org.apache.logging.log4j:log4j-to-slf4j:2.17.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+//    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.1'
+    implementation 'org.apache.logging.log4j:log4j-to-slf4j:2.17.1'
     implementation 'ch.qos.logback:logback-classic:1.2.10'
 
     implementation 'com.google.guava:guava:31.0.1-jre'
     implementation 'javax.mail:mail:1.4.7'
 
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
 }
 
-task cleanSetupFiles(type: Delete) {
+tasks.register('cleanSetupFiles', Delete) {
     delete "${buildDir}/libs/lib"
 }
 
-task copyToLib(type: Copy) {
+tasks.register('copyToLib', Copy) {
     into "${buildDir}/libs/lib"
     from configurations.runtimeClasspath
 }
 
-task copySetupFiles(type: Copy) {
+tasks.register('copySetupFiles', Copy) {
     into "${buildDir}/libs"
-    from ("${rootDir}/entrypoint.sh")
+    from("${rootDir}/entrypoint.sh")
 }
 
-task zipBuild(type: Zip) {
+tasks.register('zipBuild', Zip) {
     dependsOn(copySetupFiles)
     dependsOn(copyToLib)
 

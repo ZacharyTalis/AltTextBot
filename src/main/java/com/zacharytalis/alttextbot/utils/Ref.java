@@ -71,8 +71,8 @@ public class Ref {
 
     public static final String GITHUB_REPO = "https://github.com/ZacharyTalis/AltTextBot";
     public static final List<ProjectAuthor> authors = ImmutableList.of(
-        new ProjectAuthor("Glossawy", 95658742418247680L),
-        new ProjectAuthor("Zachary Talis", 133066971867643904L)
+        new ProjectAuthor("Zachary Talis", 133066971867643904L),
+        new ProjectAuthor("autumn/glossawy", 802365639716765716L)
     );
 
     public static final String BOT_VERSION = System.getenv().getOrDefault(BOT_VERSION_VAR, "unkown (dev)");
@@ -82,7 +82,7 @@ public class Ref {
             .setAllDenied()
             .setAllowed(
                 PermissionType.MANAGE_MESSAGES,
-                PermissionType.READ_MESSAGES,
+                PermissionType.READ_MESSAGE_HISTORY,
                 PermissionType.SEND_MESSAGES
             ).build();
 

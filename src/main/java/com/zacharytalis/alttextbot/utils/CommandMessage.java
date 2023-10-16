@@ -9,8 +9,14 @@ import org.javacord.api.entity.message.*;
 import org.javacord.api.entity.message.component.HighLevelComponent;
 import org.javacord.api.entity.message.embed.Embed;
 import org.javacord.api.entity.permission.Role;
+import org.javacord.api.entity.sticker.StickerItem;
 import org.javacord.api.entity.user.User;
+import org.javacord.api.interaction.MessageInteraction;
 import org.javacord.api.listener.ObjectAttachableListener;
+import org.javacord.api.listener.interaction.ButtonClickListener;
+import org.javacord.api.listener.interaction.MessageComponentCreateListener;
+import org.javacord.api.listener.interaction.MessageContextMenuCommandListener;
+import org.javacord.api.listener.interaction.SelectMenuChooseListener;
 import org.javacord.api.listener.message.*;
 import org.javacord.api.listener.message.reaction.ReactionAddListener;
 import org.javacord.api.listener.message.reaction.ReactionRemoveAllListener;
@@ -18,17 +24,14 @@ import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
 import org.javacord.api.util.event.ListenerManager;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 public class CommandMessage extends ForwardingObject implements Message, Loggable {
     // ! or ? start commands, tries to fetch the first token (starter + word) at beginning of message.
     // Stores in group named "prefix" in addition to group index 1.
-    private static final Pattern PREFIX_PATTERN = Pattern.compile("^(?<prefix>[!?]\\S+)");
+    private static final Pattern PREFIX_PATTERN = Pattern.compile("^[!?](?<prefix>\\S+)");
     private static final String PREFIX_GROUP = "prefix";
 
     private final Message delegate;
@@ -95,6 +98,11 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     }
 
     @Override
+    public boolean canYouReadContent() {
+        return delegate.canYouReadContent();
+    }
+
+    @Override
     public String getContent() {
         return delegate.getContent();
     }
@@ -127,6 +135,11 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     @Override
     public Optional<MessageActivity> getActivity() {
         return delegate.getActivity();
+    }
+
+    @Override
+    public EnumSet<MessageFlag> getFlags() {
+        return delegate.getFlags();
     }
 
     @Override
@@ -185,6 +198,11 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     }
 
     @Override
+    public Optional<MessageInteraction> getMessageInteraction() {
+        return delegate.getMessageInteraction();
+    }
+
+    @Override
     public List<HighLevelComponent> getComponents() {
         return delegate.getComponents();
     }
@@ -202,6 +220,16 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     @Override
     public Optional<String> getNonce() {
         return delegate.getNonce();
+    }
+
+    @Override
+    public Set<StickerItem> getStickerItems() {
+        return delegate.getStickerItems();
+    }
+
+    @Override
+    public Optional<Integer> getPosition() {
+        return delegate.getPosition();
     }
 
     @Override
@@ -285,6 +313,46 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     }
 
     @Override
+    public ListenerManager<MessageContextMenuCommandListener> addMessageContextMenuCommandListener(MessageContextMenuCommandListener listener) {
+        return null;
+    }
+
+    @Override
+    public List<MessageContextMenuCommandListener> getMessageContextMenuCommandListeners() {
+        return null;
+    }
+
+    @Override
+    public ListenerManager<MessageComponentCreateListener> addMessageComponentCreateListener(MessageComponentCreateListener listener) {
+        return null;
+    }
+
+    @Override
+    public List<MessageComponentCreateListener> getMessageComponentCreateListeners() {
+        return null;
+    }
+
+    @Override
+    public ListenerManager<SelectMenuChooseListener> addSelectMenuChooseListener(SelectMenuChooseListener listener) {
+        return null;
+    }
+
+    @Override
+    public List<SelectMenuChooseListener> getSelectMenuChooseListeners() {
+        return null;
+    }
+
+    @Override
+    public ListenerManager<ButtonClickListener> addButtonClickListener(ButtonClickListener listener) {
+        return null;
+    }
+
+    @Override
+    public List<ButtonClickListener> getButtonClickListeners() {
+        return null;
+    }
+
+    @Override
     public ListenerManager<MessageEditListener> addMessageEditListener(MessageEditListener listener) {
         return delegate.addMessageEditListener(listener);
     }
@@ -322,6 +390,16 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     @Override
     public List<CachedMessagePinListener> getCachedMessagePinListeners() {
         return delegate.getCachedMessagePinListeners();
+    }
+
+    @Override
+    public ListenerManager<MessageReplyListener> addMessageReplyListener(MessageReplyListener listener) {
+        return null;
+    }
+
+    @Override
+    public List<MessageReplyListener> getMessageReplyListeners() {
+        return null;
     }
 
     @Override

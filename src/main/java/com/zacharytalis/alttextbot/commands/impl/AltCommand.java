@@ -1,6 +1,5 @@
 package com.zacharytalis.alttextbot.commands.impl;
 
-import com.zacharytalis.alttextbot.board.v2.AltTextContribution;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.commands.BaseCommandBody;
 import com.zacharytalis.alttextbot.commands.CommandInfo;
@@ -18,7 +17,7 @@ import static com.zacharytalis.alttextbot.utils.functions.Functions.partialConsu
 public class AltCommand extends BaseCommandBody {
     public static CommandInfo description() {
         return new CommandInfo(
-            "!alt",
+            "alt",
             "Replace the user message with alt-text. Post your alt-text as a separate message with the " +
                 "format `!alt [alt-text]` (no brackets).",
                 AltCommand::new
@@ -77,7 +76,7 @@ public class AltCommand extends BaseCommandBody {
     }
 
     private String getAltContent(CommandMessage msg) {
-        return msg.getContent().substring(getName().length()).trim();
+        return msg.getContent().substring(getCommandPrefix().length()).trim();
     }
 
     private void handleDeletionFailure(CommandMessage recv, Throwable t) {

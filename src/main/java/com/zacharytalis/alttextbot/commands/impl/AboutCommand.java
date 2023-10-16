@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class AboutCommand extends BaseCommandBody {
     public static CommandInfo description() {
         return new CommandInfo(
-            "!atbabout",
+            "atbabout",
             "Get AltTextBot's version and authorship info about in a direct message.",
             AboutCommand::new
         );
@@ -39,7 +39,7 @@ public class AboutCommand extends BaseCommandBody {
                         .collect(Collectors.toList());
 
             Futures.allOf(authorWithUsers).thenAccept(authors -> {
-                final var names = authors.map(author -> author.name()  + " (" + author.user().getDiscriminatedName() + ")");
+                final var names = authors.map(author -> author.name()  + " (@" + author.user().getName() + ")");
 
                 new MessageBuilder()
                     .append("Hello! I'm ")

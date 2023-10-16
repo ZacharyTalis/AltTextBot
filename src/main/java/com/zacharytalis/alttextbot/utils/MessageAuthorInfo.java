@@ -25,6 +25,11 @@ public record MessageAuthorInfo(MessageAuthor author) implements MessageAuthor, 
     }
 
     @Override
+    public Optional<Long> getWebhookId() {
+        return author.getWebhookId();
+    }
+
+    @Override
     public Message getMessage() {
         return author.getMessage();
     }
@@ -37,6 +42,11 @@ public record MessageAuthorInfo(MessageAuthor author) implements MessageAuthor, 
     @Override
     public Icon getAvatar() {
         return author.getAvatar();
+    }
+
+    @Override
+    public Icon getAvatar(int size) {
+        return author.getAvatar(size);
     }
 
     public boolean isYourself() {

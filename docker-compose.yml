@@ -1,0 +1,45 @@
+---
+version: "3.8"
+
+services:
+  bot:
+    build:
+      context: ./build/libs
+    restart: unless-stopped
+    env_file: ./.env
+    networks:
+      - alttextbot
+    volumes:
+      - logs:/app/logs
+      - data:/app/data
+      - ./.env:/app/.env:ro
+
+  postgres:
+    image: postgres:15.4-alpine3.18
+    container_name: alt-text-bot-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=alttextbot
+      - POSTGRES_PASSWORD=alttextbot123
+      - POSTGRES_DB=alttextbot
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - PGUSER=alttextbot
+      - PGDATABASE=alttextbot
+    networks:
+      - alttextbot
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 1s
+      timeout: 10s
+      retries: 30
+      start_period: 10s
+
+volumes:
+  logs:
+  data:
+  db:
+
+networks:
+  alttextbot:

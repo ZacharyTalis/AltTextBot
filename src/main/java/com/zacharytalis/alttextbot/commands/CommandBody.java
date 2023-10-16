@@ -9,8 +9,8 @@ import java.util.function.Function;
 public interface CommandBody extends Consumer<CommandMessage>, Function<CommandMessage, CompletableFuture<Void>> {
     CommandInfo getInfo();
 
-    default String getName() {
-        return getInfo().name();
+    default String getCommandPrefix() {
+        return getInfo().bangName();
     }
 
     default String getHelp() {

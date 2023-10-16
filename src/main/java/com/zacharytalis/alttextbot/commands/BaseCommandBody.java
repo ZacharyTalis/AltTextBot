@@ -17,7 +17,7 @@ public abstract class BaseCommandBody implements CommandBody {
         this.bot = bot;
 
         // { BotName :: CommandClass (CommandName)}
-        final var logPrefix = "{" + bot.internalName() + " :: " + getClass().getSimpleName() + " (" + getName() + ")}";
+        final var logPrefix = "{" + bot.internalName() + " :: " + getClass().getSimpleName() + " (" + getCommandPrefix() + ")}";
         this.logger = Toolbox.getLogger(this.getClass(), logPrefix);
     }
 

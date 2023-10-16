@@ -27,7 +27,7 @@ public class BoardCommand extends BaseCommandBody {
 
     public static CommandInfo description() {
         return new CommandInfo(
-            "!atbboard",
+            "atbboard",
             "Display the current server's top alt-texters.",
             BoardCommand::new
         );

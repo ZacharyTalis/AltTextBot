@@ -12,7 +12,7 @@ import org.javacord.api.entity.user.User;
 public class HelpCommand extends BaseCommandBody {
     public static CommandInfo description() {
         return new CommandInfo(
-            "!atbhelp",
+            "atbhelp",
             "Get all commands from AltTextBot in a direct message.",
             HelpCommand::new
         );
@@ -48,13 +48,14 @@ public class HelpCommand extends BaseCommandBody {
 
         for(var cmd : bot().commands().values()) {
             mb.append(asHelpLine(cmd));
+            mb.appendNewLine();
         }
 
         return mb;
     }
 
     private String asHelpLine(final CommandInfo cmd) {
-        return "%s ~ %s".formatted(cmd.name(), cmd.helpInfo());
+        return "%s ~ %s".formatted(cmd.bangName(), cmd.helpInfo());
     }
 
     private void handleSendFailed(final User user, final Throwable t) {
