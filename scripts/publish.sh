@@ -91,5 +91,5 @@ record docker build -f ./Dockerfile -t "$local_tag" --build-arg version="$versio
 record docker tag "$local_tag" "$docker_hub_tag":"$version"
 record docker tag "$local_tag" "$docker_hub_tag":current
 
-record docker push "$docker_hub_tag":"$version"
-record docker push "$docker_hub_tag":current
+record docker buildx build --platform linux/arm64,linux/amd64 --push -f Dockerfile -t "$docker_hub_tag":"$version" --build-arg version="$version" ./build/libs
+record docker buildx build --platform linux/arm64,linux/amd64 --push -f Dockerfile -t "$docker_hub_tag":current --build-arg version="$version" ./build/libs
