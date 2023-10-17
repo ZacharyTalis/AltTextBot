@@ -51,6 +51,10 @@ public class HelpCommand extends BaseCommandBody {
             mb.appendNewLine();
         }
 
+        mb.append("**------------**");
+        mb.appendNewLine();
+        mb.append("We also now support slash commands! Try `/alt` instead of `!alt [alt-text]`.");
+
         return mb;
     }
 
