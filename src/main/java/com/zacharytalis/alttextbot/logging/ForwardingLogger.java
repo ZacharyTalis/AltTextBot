@@ -407,5 +407,6 @@ public abstract class ForwardingLogger extends ForwardingObject implements Logge
     }
 
     protected abstract String format(String format, Object... arguments);
+
     protected abstract String format(ForwardingLogger decorated, String format, Object... arguments);
 }

@@ -15,9 +15,9 @@ public interface ServerDao {
     Optional<Server> find(@Bind int id);
 
     @SqlUpdate("""
-        INSERT INTO servers (discord_id, created_at, updated_at)
-            VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);            
-    """)
+            INSERT INTO servers (discord_id, created_at, updated_at)
+                VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);            
+        """)
     @GetGeneratedKeys
     Server create(@Bind long discordId);
 

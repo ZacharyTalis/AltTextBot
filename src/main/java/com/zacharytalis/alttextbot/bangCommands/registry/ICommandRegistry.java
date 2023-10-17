@@ -1,6 +1,6 @@
-package com.zacharytalis.alttextbot.commands.registry;
+package com.zacharytalis.alttextbot.bangCommands.registry;
 
-import com.zacharytalis.alttextbot.commands.CommandInfo;
+import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
 
 import java.util.Collection;
@@ -14,7 +14,8 @@ public interface ICommandRegistry<T extends ICommandRegistry<T>> {
     T register(CommandInfo info);
 
     default T register(CommandInfo info1, CommandInfo info2, CommandInfo... infos) {
-        final var self = register(info1); register(info2);
+        final var self = register(info1);
+        register(info2);
         for (CommandInfo info : infos) {
             register(info);
         }

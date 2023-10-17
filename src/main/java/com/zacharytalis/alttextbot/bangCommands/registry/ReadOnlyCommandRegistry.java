@@ -1,6 +1,6 @@
-package com.zacharytalis.alttextbot.commands.registry;
+package com.zacharytalis.alttextbot.bangCommands.registry;
 
-import com.zacharytalis.alttextbot.commands.CommandInfo;
+import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.ReadOnly;
 
 import java.util.Map;

@@ -35,9 +35,9 @@ public class Toolbox {
 
             final var walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
             final var callingClass =
-                    walker.walk(
-                        s -> s.map(StackWalker.StackFrame::getDeclaringClass).filter(isRelevant).findFirst()
-                    );
+                walker.walk(
+                    s -> s.map(StackWalker.StackFrame::getDeclaringClass).filter(isRelevant).findFirst()
+                );
 
             return callingClass.map(Caller::new).orElseThrow(InferenceException::new);
         }
@@ -57,7 +57,7 @@ public class Toolbox {
 
     public static abstract class PerEnvRunner {
         private static final Supplier<PerEnvRunner> runnerFactory =
-                Ref.currentEnv().isProduction() ? ProdRunner::new : TestingRunner::new;
+            Ref.currentEnv().isProduction() ? ProdRunner::new : TestingRunner::new;
 
         public static PerEnvRunner getInstance() {
             return runnerFactory.get();
@@ -92,6 +92,7 @@ public class Toolbox {
         }
 
         public abstract PerEnvRunner inTesting(Runnable run);
+
         public abstract PerEnvRunner inProduction(Runnable run);
     }
 
@@ -170,7 +171,7 @@ public class Toolbox {
                     return null;
                 }
             };
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             uncheckedThrow(t);
 
             // unreachable

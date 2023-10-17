@@ -10,7 +10,8 @@ public class NullLogger implements Logger {
         return INSTANCE;
     }
 
-    private NullLogger() {}
+    private NullLogger() {
+    }
 
     @Override
     public void trace(Throwable t, String format, Object... args) {

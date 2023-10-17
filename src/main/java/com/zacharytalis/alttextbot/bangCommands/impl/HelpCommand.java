@@ -1,8 +1,8 @@
-package com.zacharytalis.alttextbot.commands.impl;
+package com.zacharytalis.alttextbot.bangCommands.impl;
 
+import com.zacharytalis.alttextbot.bangCommands.BaseCommandBody;
+import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
-import com.zacharytalis.alttextbot.commands.BaseCommandBody;
-import com.zacharytalis.alttextbot.commands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
 import com.zacharytalis.alttextbot.utils.Ref;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
@@ -28,7 +28,7 @@ public class HelpCommand extends BaseCommandBody {
     }
 
     @Override
-    protected void call(CommandMessage msg) {
+    protected void receive(CommandMessage msg) {
         msg.getUserAuthor().ifPresent(this::sendHelpText);
     }
 
@@ -40,13 +40,13 @@ public class HelpCommand extends BaseCommandBody {
 
     private MessageBuilder getHelpMessage() {
         final var header = """
-        Commands available for **%s v%s**:
-        **------------**
-        """.formatted(bot().internalName(), Ref.BOT_VERSION);
+            Commands available for **%s v%s**:
+            **------------**
+            """.formatted(bot().internalName(), Ref.BOT_VERSION);
 
         final var mb = new MessageBuilder().append(header);
 
-        for(var cmd : bot().commands().values()) {
+        for (var cmd : bot().commands().values()) {
             mb.append(asHelpLine(cmd));
             mb.appendNewLine();
         }

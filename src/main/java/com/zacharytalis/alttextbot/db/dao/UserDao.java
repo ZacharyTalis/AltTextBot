@@ -15,9 +15,9 @@ public interface UserDao {
     Optional<User> find(@Bind int id);
 
     @SqlUpdate("""
-        INSERT INTO users (discord_id, created_at, updated_at)
-            VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);            
-    """)
+            INSERT INTO users (discord_id, created_at, updated_at)
+                VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);            
+        """)
     @GetGeneratedKeys
     User create(@Bind long discordId);
 

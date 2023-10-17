@@ -1,8 +1,8 @@
-package com.zacharytalis.alttextbot.commands.impl;
+package com.zacharytalis.alttextbot.bangCommands.impl;
 
+import com.zacharytalis.alttextbot.bangCommands.BaseCommandBody;
+import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
-import com.zacharytalis.alttextbot.commands.BaseCommandBody;
-import com.zacharytalis.alttextbot.commands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -26,7 +26,7 @@ public class PingCommand extends BaseCommandBody {
     }
 
     @Override
-    protected void call(CommandMessage msg) {
+    protected void receive(CommandMessage msg) {
         msg.getUserAuthor().ifPresent(user -> {
             new MessageBuilder()
                 .append("Yes, yes, I'm here, ")

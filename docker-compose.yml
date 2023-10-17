@@ -5,6 +5,7 @@ services:
   bot:
     build:
       context: ./build/libs
+      dockerfile: ../../Dockerfile
     restart: unless-stopped
     env_file: ./.env
     networks:

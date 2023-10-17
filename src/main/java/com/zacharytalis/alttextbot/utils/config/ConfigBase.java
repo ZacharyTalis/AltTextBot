@@ -1,7 +1,6 @@
 package com.zacharytalis.alttextbot.utils.config;
 
 import com.zacharytalis.alttextbot.utils.Ref;
-import org.jdbi.v3.core.Jdbi;
 
 import java.util.Map;
 import java.util.Optional;

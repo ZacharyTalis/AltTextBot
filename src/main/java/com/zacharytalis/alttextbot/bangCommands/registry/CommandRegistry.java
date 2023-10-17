@@ -1,6 +1,6 @@
-package com.zacharytalis.alttextbot.commands.registry;
+package com.zacharytalis.alttextbot.bangCommands.registry;
 
-import com.zacharytalis.alttextbot.commands.CommandInfo;
+import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.ReadOnly;
 
 import java.util.Collections;
@@ -35,9 +35,9 @@ public class CommandRegistry implements ICommandRegistry<CommandRegistry>, ReadO
         );
 
         final var newInfo = new CommandInfo(
-                newName,
-                oldInfo.helpInfo(),
-                oldInfo.factory()
+            newName,
+            oldInfo.helpInfo(),
+            oldInfo.factory()
         );
 
         return register(newInfo);

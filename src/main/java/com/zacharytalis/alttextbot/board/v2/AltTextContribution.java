@@ -7,13 +7,13 @@ import org.jetbrains.annotations.NotNull;
 import java.time.ZonedDateTime;
 
 public record AltTextContribution(
-        int id,
-        int userId,
-        int serverId,
-        int score,
-        ZonedDateTime createdAt,
-        ZonedDateTime updatedAt,
-        ZonedDateTime lastContributionAt)
+    int id,
+    int userId,
+    int serverId,
+    int score,
+    ZonedDateTime createdAt,
+    ZonedDateTime updatedAt,
+    ZonedDateTime lastContributionAt)
     implements Comparable<AltTextContribution> {
 
     public User getUser() {

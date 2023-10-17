@@ -1,4 +1,4 @@
-package com.zacharytalis.alttextbot.commands;
+package com.zacharytalis.alttextbot.bangCommands;
 
 import com.google.common.base.Stopwatch;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
@@ -27,7 +27,7 @@ public abstract class BaseCommandBody implements CommandBody {
             Toolbox
                 .nullFuture()
                 .thenRunAsync(Runnables.fromConsumer(this::preCommand, msg))            // Pre-execution
-                .thenRun(() -> recordDuration(Toolbox.timed(this::call, msg)))          // Timed Execution
+                .thenRun(() -> recordDuration(Toolbox.timed(this::receive, msg)))          // Timed Execution
                 .thenRun(Runnables.fromConsumer(this::postCommand, msg))                // Post-execution
                 .exceptionally(Toolbox.acceptAndRethrow(this::handleError));            // Error handling
         // Errors will be rethrown for another exception handler
@@ -41,7 +41,7 @@ public abstract class BaseCommandBody implements CommandBody {
         return logger;
     }
 
-    protected abstract void call(CommandMessage msg);
+    protected abstract void receive(CommandMessage msg);
 
     protected void preCommand(final CommandMessage msg) {
         logger().debug("Command execution starting");

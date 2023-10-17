@@ -1,12 +1,9 @@
-package com.zacharytalis.alttextbot.commands.impl;
+package com.zacharytalis.alttextbot.bangCommands.impl;
 
+import com.zacharytalis.alttextbot.bangCommands.BaseCommandBody;
+import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
-import com.zacharytalis.alttextbot.commands.BaseCommandBody;
-import com.zacharytalis.alttextbot.commands.CommandInfo;
-import com.zacharytalis.alttextbot.db.ConnectionPool;
-import com.zacharytalis.alttextbot.db.dao.AltTextContributionDao;
-import com.zacharytalis.alttextbot.db.dao.ServerDao;
-import com.zacharytalis.alttextbot.db.dao.UserDao;
+import com.zacharytalis.alttextbot.services.AltTextContributionService;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
 import com.zacharytalis.alttextbot.utils.DiscordEntities;
 import com.zacharytalis.alttextbot.utils.MessageAuthorInfo;
@@ -20,8 +17,8 @@ public class AltCommand extends BaseCommandBody {
             "alt",
             "Replace the user message with alt-text. Post your alt-text as a separate message with the " +
                 "format `!alt [alt-text]` (no brackets).",
-                AltCommand::new
-            );
+            AltCommand::new
+        );
     }
 
     public AltCommand(AltTextBot bot) {
@@ -34,7 +31,7 @@ public class AltCommand extends BaseCommandBody {
     }
 
     @Override
-    protected void call(CommandMessage recv) {
+    protected void receive(CommandMessage recv) {
         final var altText = getAltContent(recv);
 
         // First, send alt-text submission
@@ -42,31 +39,21 @@ public class AltCommand extends BaseCommandBody {
 
         // Send
         final var sendFuture =
-                recv.getChannel().sendMessage(altText);
+            recv.getChannel().sendMessage(altText);
         sendFuture.exceptionally(partialConsumer(this::handleSendFailure, recv));
 
         // Increment once sent successfully
         sendFuture.thenRunAsync(() -> {
-            final var userDiscordId = recv.getUserAuthor().orElseThrow().getId();
-            final var serverDiscordId = recv.getServerID();
+            final var user = recv.getUserAuthor().orElseThrow();
+            final var server = recv.getServer().orElseThrow();
+            final var service = new AltTextContributionService(server);
 
-            ConnectionPool.useHandle(handle -> {
-               final var ud = handle.attach(UserDao.class);
-               final var sd = handle.attach(ServerDao.class);
-               final var atcd = handle.attach(AltTextContributionDao.class);
+            final var newScore = service.increment(user);
 
-               final var user = ud.fetchOrCreate(userDiscordId);
-               final var server = sd.fetchOrCreate(serverDiscordId);
-               final var contrib = atcd.fetchOrCreate(user, server);
-               final var newScore = atcd.increment(contrib);
-
-               final var serverName = DiscordEntities.getNamedIdentifierOrElse(recv::getServer, "<unknown>");
-
-               logger().info(
-                   "({}) in {} incremented score from {} to {}",
-                   recv.getAuthorInfo(), serverName, contrib.score(), newScore.score()
-               );
-            });
+            logger().info(
+                "({}) in {} incremented score to {}",
+                recv.getAuthorInfo(), server.getName(), newScore
+            );
         }).exceptionally(partialConsumer(this::handleIncrementFailure, recv));
 
         // Delete once sent successfully

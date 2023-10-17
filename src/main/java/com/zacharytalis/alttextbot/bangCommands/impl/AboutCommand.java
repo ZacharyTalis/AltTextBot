@@ -1,8 +1,8 @@
-package com.zacharytalis.alttextbot.commands.impl;
+package com.zacharytalis.alttextbot.bangCommands.impl;
 
+import com.zacharytalis.alttextbot.bangCommands.BaseCommandBody;
+import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
-import com.zacharytalis.alttextbot.commands.BaseCommandBody;
-import com.zacharytalis.alttextbot.commands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.*;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -29,17 +29,17 @@ public class AboutCommand extends BaseCommandBody {
     }
 
     @Override
-    protected void call(CommandMessage msg) {
+    protected void receive(CommandMessage msg) {
         bot().whenApiAvailable(api -> {
             final var botUser = api.getYourself();
 
             final var authorWithUsers =
-                    Ref.authors.stream()
-                        .map(author -> author.withUser(api))
-                        .collect(Collectors.toList());
+                Ref.authors.stream()
+                    .map(author -> author.withUser(api))
+                    .collect(Collectors.toList());
 
             Futures.allOf(authorWithUsers).thenAccept(authors -> {
-                final var names = authors.map(author -> author.name()  + " (@" + author.user().getName() + ")");
+                final var names = authors.map(author -> author.name() + " (@" + author.user().getName() + ")");
 
                 new MessageBuilder()
                     .append("Hello! I'm ")
@@ -54,7 +54,7 @@ public class AboutCommand extends BaseCommandBody {
                     .append(Ref.GITHUB_REPO)
                     .append(".")
                     .send(msg.getChannel())
-                        .exceptionally(Functions.partialConsumer(this::handleSendFailure, msg));
+                    .exceptionally(Functions.partialConsumer(this::handleSendFailure, msg));
             });
         });
     }

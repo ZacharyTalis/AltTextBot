@@ -9,6 +9,8 @@ public class Runnables {
     }
 
     public static <T, U> Runnable fromFunction(Function<T, U> fn, T val) {
-        return () -> { fn.apply(val); };
+        return () -> {
+            fn.apply(val);
+        };
     }
 }

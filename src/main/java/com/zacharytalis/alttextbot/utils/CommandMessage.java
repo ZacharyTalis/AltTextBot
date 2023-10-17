@@ -81,7 +81,7 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
         final var channel = DiscordEntities.getNamedIdentifierOrElse(this::getServerTextChannel, "unknown");
         final var server = DiscordEntities.getNamedIdentifierOrElse(this::getServer, "unknown");
 
-        var arguments = new Object[] { getIdAsString(), author, server, channel };
+        var arguments = new Object[]{getIdAsString(), author, server, channel};
         var logFormat = "id: {}, {}, server: {}, channel: {}";
 
         if (Ref.currentEnv().isTesting()) {

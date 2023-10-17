@@ -1,4 +1,4 @@
-package com.zacharytalis.alttextbot.commands;
+package com.zacharytalis.alttextbot.bangCommands;
 
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 

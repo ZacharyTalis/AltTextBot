@@ -59,6 +59,7 @@ public class Ref {
         }
 
         public abstract boolean isTesting();
+
         public abstract boolean isProduction();
     }
 

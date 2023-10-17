@@ -23,7 +23,10 @@ public class Functions {
     }
 
     public static <T, U> Function<T, U> nullify(Consumer<T> fn) {
-        return t -> { fn.accept(t); return null; };
+        return t -> {
+            fn.accept(t);
+            return null;
+        };
     }
 
     public static <T, U, R> Function<U, R> partial(BiFunction<T, U, R> fn, T arg) {

@@ -1,8 +1,10 @@
 package com.zacharytalis.alttextbot.bots;
 
-import com.zacharytalis.alttextbot.commands.registry.CommandRegistry;
-import com.zacharytalis.alttextbot.commands.registry.ICommandRegistry;
+import com.zacharytalis.alttextbot.bangCommands.registry.CommandRegistry;
+import com.zacharytalis.alttextbot.bangCommands.registry.ICommandRegistry;
+import com.zacharytalis.alttextbot.commands.ICommandDispatch;
 import com.zacharytalis.alttextbot.logging.Logger;
+import com.zacharytalis.alttextbot.messages.UserCommandMessage;
 import com.zacharytalis.alttextbot.utils.CommandMessage;
 import com.zacharytalis.alttextbot.utils.Futures;
 import com.zacharytalis.alttextbot.utils.Ref;
@@ -28,12 +30,14 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
     private static final Logger logger = Toolbox.inferLogger();
 
     private final CommandRegistry commands;
+    private final ICommandDispatch dispatcher;
     private final DiscordApiBuilder apiBuilder;
     private final Config config;
-    private CompletableFuture<DiscordApi> discordApi;
+    private CompletableFuture<DiscordApi> discordApi = new CompletableFuture<>();
 
-    public AltTextBot(final Config config, final CommandRegistry registry) throws ConfigurationException {
+    public AltTextBot(final Config config, final CommandRegistry registry, final ICommandDispatch dispatch) throws ConfigurationException {
         this.commands = registry;
+        this.dispatcher = dispatch;
         this.config = config;
 
         logger.info("Bot Initialized");
@@ -46,7 +50,9 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
 
     @Override
     public CompletableFuture<AltTextBot> start() {
-        this.discordApi = Futures.runThenGet(() -> logger.info("Logging In..."), this.apiBuilder::login);
+        Futures.supplyAsync(this.apiBuilder::login).thenAccept(api -> {
+            this.discordApi.complete(api);
+        });
 
         this.discordApi.thenAccept(api -> {
             final var link = api.createBotInvite(Ref.REQUIRED_PERMS);
@@ -63,7 +69,7 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
                 .exceptionally(
                     Functions.nullify(future::completeExceptionally)
                 );
-        } catch(NotStartedException ex) {
+        } catch (NotStartedException ex) {
             logger.error("Somehow bot is not started in run?", ex);
         }
 
@@ -77,14 +83,17 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
 
     @Override
     public CompletableFuture<DiscordApi> api() {
-        assertStarted();
-
         return this.discordApi;
     }
 
     @Override
     public String internalName() {
         return "AltTextBot";
+    }
+
+    @Override
+    public String version() {
+        return Ref.BOT_VERSION;
     }
 
     @Override
@@ -97,30 +106,39 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
         return config;
     }
 
-    private void assertStarted() throws NotStartedException {
-        if (this.discordApi == null)
-            throw new NotStartedException();
-    }
-
     private void addBotListeners(DiscordApi api) {
         // Listen for *any* commands
         api.addMessageCreateListener(event -> {
             final var msg = new CommandMessage(event.getMessage());
             final var author = msg.getAuthorInfo();
 
+            final var bangMsg = new UserCommandMessage.Bang(AltTextBot.this, msg);
+
             logger.testingOnly().info("Message received: {}", msg);
 
-            if(!author.isYourself() && commands.containsPrefix(msg))
-                commands.get(msg).orElseThrow().instantiate(AltTextBot.this).executeAsync(msg);
-            else {
-                Toolbox
-                    .perEnv()
-                    .inTesting(() -> logger.info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsPrefix(msg)))
-                    .inProduction(() -> {
-                        if (msg.isCommandLike())
-                            logger.warn("Ignoring command-like message because it is either self or invalid. prefix: {}, is_self: {}", msg.getCommandPrefix(), author.isYourself());
-                    })
-                ;
+            if (!author.isYourself() && commands.containsPrefix(msg))
+                if (this.dispatcher.canDispatch(bangMsg))
+                    dispatcher.dispatch(bangMsg);
+                else {
+                    Toolbox
+                        .perEnv()
+                        .inTesting(() -> logger.info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsPrefix(msg)))
+                        .inProduction(() -> {
+                            if (msg.isCommandLike())
+                                logger.warn("Ignoring command-like message because it is either self or invalid. prefix: {}, is_self: {}", msg.getCommandPrefix(), author.isYourself());
+                        })
+                    ;
+                }
+        });
+
+        api.addSlashCommandCreateListener(event -> {
+            final var interaction = event.getSlashCommandInteraction();
+            final var slashMsg = new UserCommandMessage.Slash(AltTextBot.this, interaction);
+
+            if (this.dispatcher.canDispatch(slashMsg)) {
+                dispatcher.dispatch(slashMsg);
+            } else {
+                logger.warn("Ignoring slash command: {}", interaction.getFullCommandName());
             }
         });
 
