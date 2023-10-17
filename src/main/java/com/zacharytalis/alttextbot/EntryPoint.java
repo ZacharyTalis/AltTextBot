@@ -13,6 +13,7 @@ import com.zacharytalis.alttextbot.slashCommands.SlashCommandHandlerCollection;
 import com.zacharytalis.alttextbot.slashCommands.impl.AboutCommandHandler;
 import com.zacharytalis.alttextbot.slashCommands.impl.AltCommandHandler;
 import com.zacharytalis.alttextbot.slashCommands.impl.BoardCommandHandler;
+import com.zacharytalis.alttextbot.slashCommands.impl.PingCommandHandler;
 import com.zacharytalis.alttextbot.utils.Configs;
 import com.zacharytalis.alttextbot.utils.Inflections;
 import com.zacharytalis.alttextbot.utils.Toolbox;
@@ -52,6 +53,7 @@ public class EntryPoint {
         slashCmds.add(new AboutCommandHandler());
         slashCmds.add(new AltCommandHandler());
         slashCmds.add(new BoardCommandHandler());
+        slashCmds.add(new PingCommandHandler());
 
         final var dispatch = new MultiDispatch(
             new BangDispatch(cmds),
