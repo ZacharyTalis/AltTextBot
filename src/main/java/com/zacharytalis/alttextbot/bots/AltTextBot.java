@@ -116,19 +116,18 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
 
             logger.testingOnly().info("Message received: {}", msg);
 
-            if (!author.isYourself() && commands.containsPrefix(msg))
-                if (this.dispatcher.canDispatch(bangMsg))
-                    dispatcher.dispatch(bangMsg);
-                else {
-                    Toolbox
-                        .perEnv()
-                        .inTesting(() -> logger.info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsPrefix(msg)))
-                        .inProduction(() -> {
-                            if (msg.isCommandLike())
-                                logger.warn("Ignoring command-like message because it is either self or invalid. prefix: {}, is_self: {}", msg.getCommandPrefix(), author.isYourself());
-                        })
-                    ;
-                }
+            if (!author.isYourself() && dispatcher.canDispatch(bangMsg)) {
+                dispatcher.dispatch(bangMsg);
+            } else {
+                Toolbox
+                    .perEnv()
+                    .inTesting(() -> logger.info("Ignoring message because it is either self or invalid. {}, known_command: {}", msg, commands.containsPrefix(msg)))
+                    .inProduction(() -> {
+                        if (msg.isCommandLike())
+                            logger.warn("Ignoring command-like message because it is either self or invalid. prefix: {}, is_self: {}", msg.getCommandPrefix(), author.isYourself());
+                    })
+                ;
+            }
         });
 
         api.addSlashCommandCreateListener(event -> {
