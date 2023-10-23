@@ -1,7 +1,7 @@
 package com.zacharytalis.alttextbot.messages;
 
 import com.zacharytalis.alttextbot.bots.AltTextBot;
-import com.zacharytalis.alttextbot.utils.CommandMessage;
+import com.zacharytalis.alttextbot.bangCommands.CommandMessage;
 import org.javacord.api.interaction.SlashCommandInteraction;
 
 public interface UserCommandMessage {

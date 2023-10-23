@@ -1,7 +1,7 @@
-package com.zacharytalis.alttextbot.board.v2;
+package com.zacharytalis.alttextbot.board.v2.models;
 
 import com.zacharytalis.alttextbot.db.ConnectionPool;
-import com.zacharytalis.alttextbot.db.dao.UserDao;
+import com.zacharytalis.alttextbot.board.v2.dao.UserDao;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.ZonedDateTime;

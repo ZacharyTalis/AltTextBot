@@ -1,4 +1,4 @@
-package com.zacharytalis.alttextbot.board.v2;
+package com.zacharytalis.alttextbot.board.v2.models;
 
 import java.time.ZonedDateTime;
 

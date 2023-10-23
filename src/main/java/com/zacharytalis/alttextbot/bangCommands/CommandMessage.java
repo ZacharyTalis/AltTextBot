@@ -1,7 +1,9 @@
-package com.zacharytalis.alttextbot.utils;
+package com.zacharytalis.alttextbot.bangCommands;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ForwardingObject;
+import com.zacharytalis.alttextbot.utils.*;
+import com.zacharytalis.alttextbot.utils.Arrays;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.emoji.CustomEmoji;

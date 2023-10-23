@@ -3,7 +3,6 @@ package com.zacharytalis.alttextbot.bangCommands;
 import com.google.common.base.Stopwatch;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.logging.Logger;
-import com.zacharytalis.alttextbot.utils.CommandMessage;
 import com.zacharytalis.alttextbot.utils.Toolbox;
 import com.zacharytalis.alttextbot.utils.functions.Runnables;
 

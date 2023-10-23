@@ -1,5 +1,6 @@
 package com.zacharytalis.alttextbot.utils;
 
+import com.zacharytalis.alttextbot.bangCommands.CommandMessage;
 import org.javacord.api.entity.DiscordEntity;
 import org.javacord.api.entity.Nameable;
 import org.javacord.api.entity.message.Message;

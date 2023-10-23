@@ -1,10 +1,10 @@
 package com.zacharytalis.alttextbot.services;
 
-import com.zacharytalis.alttextbot.board.v2.AltTextContribution;
+import com.zacharytalis.alttextbot.board.v2.models.AltTextContribution;
 import com.zacharytalis.alttextbot.db.ConnectionPool;
-import com.zacharytalis.alttextbot.db.dao.AltTextContributionDao;
-import com.zacharytalis.alttextbot.db.dao.ServerDao;
-import com.zacharytalis.alttextbot.db.dao.UserDao;
+import com.zacharytalis.alttextbot.board.v2.dao.AltTextContributionDao;
+import com.zacharytalis.alttextbot.board.v2.dao.ServerDao;
+import com.zacharytalis.alttextbot.board.v2.dao.UserDao;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 

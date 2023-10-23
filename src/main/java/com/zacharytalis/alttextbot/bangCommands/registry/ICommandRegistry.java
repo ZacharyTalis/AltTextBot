@@ -1,7 +1,7 @@
 package com.zacharytalis.alttextbot.bangCommands.registry;
 
 import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
-import com.zacharytalis.alttextbot.utils.CommandMessage;
+import com.zacharytalis.alttextbot.bangCommands.CommandMessage;
 
 import java.util.Collection;
 import java.util.Map;

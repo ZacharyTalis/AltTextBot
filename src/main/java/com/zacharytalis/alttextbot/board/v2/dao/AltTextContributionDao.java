@@ -1,8 +1,8 @@
-package com.zacharytalis.alttextbot.db.dao;
+package com.zacharytalis.alttextbot.board.v2.dao;
 
-import com.zacharytalis.alttextbot.board.v2.AltTextContribution;
-import com.zacharytalis.alttextbot.board.v2.Server;
-import com.zacharytalis.alttextbot.board.v2.User;
+import com.zacharytalis.alttextbot.board.v2.models.AltTextContribution;
+import com.zacharytalis.alttextbot.board.v2.models.Server;
+import com.zacharytalis.alttextbot.board.v2.models.User;
 import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindMethods;

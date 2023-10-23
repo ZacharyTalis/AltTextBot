@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.Queues;
-import com.zacharytalis.alttextbot.board.v2.AltTextContribution;
+import com.zacharytalis.alttextbot.board.v2.models.AltTextContribution;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 

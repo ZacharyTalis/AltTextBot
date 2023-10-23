@@ -1,6 +1,7 @@
 package com.zacharytalis.alttextbot.slashCommands.impl;
 
 import com.zacharytalis.alttextbot.bots.DiscordBotInfo;
+import com.zacharytalis.alttextbot.values.AltTextEntry;
 import com.zacharytalis.alttextbot.services.AltTextContributionService;
 import com.zacharytalis.alttextbot.slashCommands.SlashCommandHandler;
 import org.javacord.api.entity.message.component.ActionRow;
@@ -10,12 +11,18 @@ import org.javacord.api.interaction.InteractionBase;
 import org.javacord.api.interaction.SlashCommandBuilder;
 import org.javacord.api.interaction.SlashCommandInteraction;
 
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class AltCommandHandler implements SlashCommandHandler {
-    private final Random random = new Random();
+    public static class InvalidModalResponseException extends RuntimeException {
+        InvalidModalResponseException(String msg) {
+            super(msg);
+        }
+    }
+
+    private static final String ALT_TEXT_FIELD = "alt_text";
 
     @Override
     public String name() {
@@ -38,51 +45,69 @@ public class AltCommandHandler implements SlashCommandHandler {
 
     @Override
     public CompletableFuture<?> receive(DiscordBotInfo botInfo, SlashCommandInteraction interaction) {
-        final var customId = this.uniqueId(interaction);
-        final var respondedFuture = new CompletableFuture<InteractionBase>();
+        final var modalId = this.uniqueId(interaction);
 
-        final var listener = interaction.getApi().addModalSubmitListener(event -> {
-            final var modal = event.getModalInteraction();
-
-            if (modal.getCustomId().equals(customId)) {
-                final var altText = modal.getTextInputValueByCustomId("alt_text").get();
-                modal.getChannel().ifPresent(channel -> {
-                    modal.createImmediateResponder()
-                        .setContent(altText)
-                        .respond()
-                        .thenRun(() -> respondedFuture.complete(modal));
-                });
-            }
-        }).removeAfter(30, TimeUnit.MINUTES);
-
-        respondedFuture.thenRun(listener::remove);
-        respondedFuture.thenAccept(this::registerAltContribution);
+        listenForModalSubmit(interaction, modalId)
+            .thenAccept(this::registerAltContribution);
 
         return interaction.respondWithModal(
-            customId,
+            modalId,
             "Image Alt Text",
             ActionRow.of(
                 TextInput.create(
                     TextInputStyle.PARAGRAPH,
-                    "alt_text",
+                    ALT_TEXT_FIELD,
                     "Alt Text"
                 )
             )
         );
     }
 
+    private CompletableFuture<AltTextEntry> listenForModalSubmit(SlashCommandInteraction interaction, String modalId) {
+        final var respondedFuture = new CompletableFuture<AltTextEntry>();
+
+        final var listener = interaction.getApi().addModalSubmitListener(event -> {
+            final var modal = event.getModalInteraction();
+
+            if (modal.getCustomId().equals(modalId)) {
+                modal.getTextInputValueByCustomId(ALT_TEXT_FIELD).ifPresentOrElse(
+                    altText -> {
+                        modal.getChannel().ifPresent(channel -> {
+                            modal.createImmediateResponder()
+                                .setContent(altText)
+                                .respond()
+                                .thenRun(() -> respondedFuture.complete(
+                                    new AltTextEntry(
+                                        modal.getUser(),
+                                        modal.getServer().orElseThrow(),
+                                        altText
+                                    )
+                                ));
+                        });
+                    },
+                    () -> respondedFuture.completeExceptionally(
+                        new InvalidModalResponseException("Missing value for " + ALT_TEXT_FIELD + " in modal " + modalId)
+                    )
+                );
+            }
+        }).removeAfter(30, TimeUnit.MINUTES);
+
+        respondedFuture
+            .whenComplete((_i, _ex) -> listener.remove());
+
+        return respondedFuture;
+    }
+
     private String uniqueId(InteractionBase interaction) {
         final var user = interaction.getUser().getName();
-        final var randomValue = random.nextLong();
+        final var randomValue = ThreadLocalRandom.current().nextLong();
 
         return "alt-" + user + "-" + randomValue;
     }
 
-    private void registerAltContribution(InteractionBase interaction) {
-        final var user = interaction.getUser();
-        final var server = interaction.getServer().orElseThrow();
-        final var service = new AltTextContributionService(server);
+    private void registerAltContribution(AltTextEntry entry) {
+        final var service = new AltTextContributionService(entry.server());
 
-        service.increment(user);
+        service.increment(entry.user());
     }
 }

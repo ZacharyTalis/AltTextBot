@@ -1,6 +1,6 @@
-package com.zacharytalis.alttextbot.db.dao;
+package com.zacharytalis.alttextbot.board.v2.dao;
 
-import com.zacharytalis.alttextbot.board.v2.Server;
+import com.zacharytalis.alttextbot.board.v2.models.Server;
 import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;

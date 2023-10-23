@@ -1,5 +1,6 @@
 package com.zacharytalis.alttextbot.bangCommands.impl;
 
+import com.zacharytalis.alttextbot.bangCommands.CommandMessage;
 import com.zacharytalis.alttextbot.bangCommands.BaseCommandBody;
 import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
