@@ -1,4 +1,4 @@
-package com.zacharytalis.alttextbot.commands;
+package com.zacharytalis.alttextbot.commands.dispatch;
 
 import com.zacharytalis.alttextbot.messages.UserCommandMessage;
 

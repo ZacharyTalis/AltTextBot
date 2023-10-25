@@ -1,15 +1,16 @@
 package com.zacharytalis.alttextbot.slashCommands.impl;
 
-import com.zacharytalis.alttextbot.bots.DiscordBotInfo;
-import com.zacharytalis.alttextbot.services.LeaderboardService;
+import com.zacharytalis.alttextbot.commands.runners.BoardRunner;
+import com.zacharytalis.alttextbot.commands.runners.IBoardProvider;
+import com.zacharytalis.alttextbot.messages.UserCommandMessage;
 import com.zacharytalis.alttextbot.slashCommands.SlashCommandHandler;
+import org.javacord.api.entity.server.Server;
 import org.javacord.api.interaction.SlashCommandBuilder;
-import org.javacord.api.interaction.SlashCommandInteraction;
 
 import java.util.concurrent.CompletableFuture;
 
 public class BoardCommandHandler implements SlashCommandHandler {
-    static final int TOP_N = 5;
+    private record Provider(Server server) implements IBoardProvider {}
 
     @Override
     public String name() {
@@ -31,13 +32,14 @@ public class BoardCommandHandler implements SlashCommandHandler {
     }
 
     @Override
-    public CompletableFuture<?> receive(DiscordBotInfo botInfo, SlashCommandInteraction interaction) {
+    public CompletableFuture<?> receive(UserCommandMessage.Slash command) {
+        final var interaction = command.interaction();
         final var server = interaction.getServer().orElseThrow();
-        final var service = new LeaderboardService(server);
+        final var runner = new BoardRunner(new Provider(server));
 
         return interaction
             .createImmediateResponder()
-            .addEmbed(service.getLeaderboardEmbed(TOP_N))
+            .addEmbed(runner.getLeaderboardEmbed())
             .respond();
     }
 }

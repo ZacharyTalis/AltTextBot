@@ -2,9 +2,9 @@ package com.zacharytalis.alttextbot.bangCommands.impl;
 
 import com.zacharytalis.alttextbot.bangCommands.BaseCommandBody;
 import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
+import com.zacharytalis.alttextbot.bangCommands.CommandMessage;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.services.AltTextContributionService;
-import com.zacharytalis.alttextbot.bangCommands.CommandMessage;
 import com.zacharytalis.alttextbot.utils.DiscordEntities;
 import com.zacharytalis.alttextbot.utils.MessageAuthorInfo;
 import org.javacord.api.entity.message.MessageBuilder;

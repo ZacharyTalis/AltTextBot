@@ -1,9 +1,9 @@
 package com.zacharytalis.alttextbot.slashCommands.impl;
 
-import com.zacharytalis.alttextbot.bots.DiscordBotInfo;
-import com.zacharytalis.alttextbot.values.AltTextEntry;
+import com.zacharytalis.alttextbot.messages.UserCommandMessage;
 import com.zacharytalis.alttextbot.services.AltTextContributionService;
 import com.zacharytalis.alttextbot.slashCommands.SlashCommandHandler;
+import com.zacharytalis.alttextbot.values.AltTextEntry;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.TextInput;
 import org.javacord.api.entity.message.component.TextInputStyle;
@@ -44,7 +44,8 @@ public class AltCommandHandler implements SlashCommandHandler {
     }
 
     @Override
-    public CompletableFuture<?> receive(DiscordBotInfo botInfo, SlashCommandInteraction interaction) {
+    public CompletableFuture<?> receive(UserCommandMessage.Slash command) {
+        final var interaction = command.interaction();
         final var modalId = this.uniqueId(interaction);
 
         listenForModalSubmit(interaction, modalId)

@@ -1,17 +1,19 @@
 package com.zacharytalis.alttextbot.slashCommands.impl;
 
-import com.zacharytalis.alttextbot.bots.DiscordBotInfo;
+import com.zacharytalis.alttextbot.commands.runners.IPingProvider;
+import com.zacharytalis.alttextbot.commands.runners.PingRunner;
+import com.zacharytalis.alttextbot.messages.UserCommandMessage;
 import com.zacharytalis.alttextbot.slashCommands.SlashCommandHandler;
-import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.MessageFlag;
-import org.javacord.api.entity.message.mention.AllowedMentions;
 import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.interaction.SlashCommandBuilder;
-import org.javacord.api.interaction.SlashCommandInteraction;
 
 import java.util.concurrent.CompletableFuture;
 
 public class PingCommandHandler implements SlashCommandHandler {
+    private record Provider(User user) implements IPingProvider {}
+
     @Override
     public String name() {
         return "ping";
@@ -32,16 +34,12 @@ public class PingCommandHandler implements SlashCommandHandler {
     }
 
     @Override
-    public CompletableFuture<?> receive(DiscordBotInfo botInfo, SlashCommandInteraction interaction) {
+    public CompletableFuture<?> receive(UserCommandMessage.Slash command) {
+        final var interaction = command.interaction();
+        final var runner = new PingRunner(new Provider(interaction.getUser()));
+
         return interaction.createImmediateResponder()
-            .setContent(
-                new MessageBuilder()
-                    .append("Yes, yes I'm here and alive ")
-                    .append(interaction.getUser())
-                    .append(" - PONG")
-                    .getStringBuilder()
-                    .toString()
-            )
+            .setContent(runner.getPong())
             .setAllowedMentions(
                 new AllowedMentionsBuilder().addUser(interaction.getUser().getId()).build()
             )

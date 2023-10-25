@@ -1,11 +1,11 @@
 package com.zacharytalis.alttextbot.bots;
 
+import com.zacharytalis.alttextbot.bangCommands.CommandMessage;
 import com.zacharytalis.alttextbot.bangCommands.registry.CommandRegistry;
 import com.zacharytalis.alttextbot.bangCommands.registry.ICommandRegistry;
-import com.zacharytalis.alttextbot.commands.ICommandDispatch;
+import com.zacharytalis.alttextbot.commands.dispatch.ICommandDispatch;
 import com.zacharytalis.alttextbot.logging.Logger;
 import com.zacharytalis.alttextbot.messages.UserCommandMessage;
-import com.zacharytalis.alttextbot.bangCommands.CommandMessage;
 import com.zacharytalis.alttextbot.utils.Futures;
 import com.zacharytalis.alttextbot.utils.Ref;
 import com.zacharytalis.alttextbot.utils.Toolbox;

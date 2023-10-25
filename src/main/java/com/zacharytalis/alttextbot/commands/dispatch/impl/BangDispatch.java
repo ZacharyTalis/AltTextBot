@@ -1,8 +1,8 @@
-package com.zacharytalis.alttextbot.commands.impl;
+package com.zacharytalis.alttextbot.commands.dispatch.impl;
 
 import com.zacharytalis.alttextbot.bangCommands.CommandBody;
 import com.zacharytalis.alttextbot.bangCommands.registry.ICommandRegistry;
-import com.zacharytalis.alttextbot.commands.ICommandDispatch;
+import com.zacharytalis.alttextbot.commands.dispatch.ICommandDispatch;
 import com.zacharytalis.alttextbot.messages.UserCommandMessage;
 import com.zacharytalis.alttextbot.utils.Toolbox;
 

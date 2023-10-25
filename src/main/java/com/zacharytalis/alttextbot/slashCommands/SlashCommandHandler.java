@@ -1,8 +1,7 @@
 package com.zacharytalis.alttextbot.slashCommands;
 
-import com.zacharytalis.alttextbot.bots.DiscordBotInfo;
+import com.zacharytalis.alttextbot.messages.UserCommandMessage;
 import org.javacord.api.interaction.SlashCommandBuilder;
-import org.javacord.api.interaction.SlashCommandInteraction;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -14,5 +13,5 @@ public interface SlashCommandHandler {
 
     SlashCommandBuilder definition();
 
-    CompletableFuture<?> receive(DiscordBotInfo botInfo, SlashCommandInteraction interaction);
+    CompletableFuture<?> receive(UserCommandMessage.Slash slashCommand);
 }

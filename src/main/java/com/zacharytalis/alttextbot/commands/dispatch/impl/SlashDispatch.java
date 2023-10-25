@@ -1,6 +1,6 @@
-package com.zacharytalis.alttextbot.commands.impl;
+package com.zacharytalis.alttextbot.commands.dispatch.impl;
 
-import com.zacharytalis.alttextbot.commands.ICommandDispatch;
+import com.zacharytalis.alttextbot.commands.dispatch.ICommandDispatch;
 import com.zacharytalis.alttextbot.messages.UserCommandMessage;
 import com.zacharytalis.alttextbot.slashCommands.SlashCommandHandler;
 import com.zacharytalis.alttextbot.utils.Toolbox;
@@ -25,7 +25,7 @@ public class SlashDispatch implements ICommandDispatch {
         final var handlerOption = findHandler(msg.interaction());
 
         return handlerOption.map(handler -> {
-            return Toolbox.voidFuture(handler.receive(msg.bot(), msg.interaction()));
+            return Toolbox.voidFuture(handler.receive(msg));
         }).orElse(Toolbox.nullFuture());
     }
 
