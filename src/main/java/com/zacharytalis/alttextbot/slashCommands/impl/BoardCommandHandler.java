@@ -10,7 +10,8 @@ import org.javacord.api.interaction.SlashCommandBuilder;
 import java.util.concurrent.CompletableFuture;
 
 public class BoardCommandHandler implements SlashCommandHandler {
-    private record Provider(Server server) implements IBoardProvider {}
+    private record Provider(Server server) implements IBoardProvider {
+    }
 
     @Override
     public String name() {

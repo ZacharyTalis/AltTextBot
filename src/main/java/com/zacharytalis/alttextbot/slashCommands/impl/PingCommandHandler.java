@@ -12,7 +12,8 @@ import org.javacord.api.interaction.SlashCommandBuilder;
 import java.util.concurrent.CompletableFuture;
 
 public class PingCommandHandler implements SlashCommandHandler {
-    private record Provider(User user) implements IPingProvider {}
+    private record Provider(User user) implements IPingProvider {
+    }
 
     @Override
     public String name() {

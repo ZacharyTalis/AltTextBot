@@ -33,7 +33,7 @@ public class AltTextBot implements DiscordBot<AltTextBot> {
     private final ICommandDispatch dispatcher;
     private final DiscordApiBuilder apiBuilder;
     private final Config config;
-    private CompletableFuture<DiscordApi> discordApi = new CompletableFuture<>();
+    private final CompletableFuture<DiscordApi> discordApi = new CompletableFuture<>();
 
     public AltTextBot(final Config config, final CommandRegistry registry, final ICommandDispatch dispatch) throws ConfigurationException {
         this.commands = registry;

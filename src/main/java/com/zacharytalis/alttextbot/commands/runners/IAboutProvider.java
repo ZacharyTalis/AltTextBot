@@ -5,5 +5,6 @@ import org.javacord.api.DiscordApi;
 
 public interface IAboutProvider {
     DiscordApi api();
+
     DiscordBot<?> bot();
 }

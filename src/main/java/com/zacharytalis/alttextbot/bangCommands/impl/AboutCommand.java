@@ -44,7 +44,7 @@ public class AboutCommand extends BaseCommandBody {
             final var runner = new AboutRunner(new Provider(msg, bot()));
 
             runner.getAboutText().thenCompose(aboutText ->
-               msg.getChannel().sendMessage(aboutText)
+                msg.getChannel().sendMessage(aboutText)
             ).exceptionally(Functions.partialConsumer(this::handleSendFailure, msg));
         });
     }

@@ -6,7 +6,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 public class BoardRunner {
     private static final int TOP_N = 5;
 
-    private IBoardProvider provider;
+    private final IBoardProvider provider;
 
     public BoardRunner(IBoardProvider provider) {
         this.provider = provider;

@@ -10,7 +10,8 @@ import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.entity.server.Server;
 
 public class BoardCommand extends BaseCommandBody {
-    private record Provider(Server server) implements IBoardProvider {}
+    private record Provider(Server server) implements IBoardProvider {
+    }
 
     public static CommandInfo description() {
         return new CommandInfo(

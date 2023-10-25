@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class AboutRunner {
-    private IAboutProvider provider;
+    private final IAboutProvider provider;
 
     public AboutRunner(IAboutProvider provider) {
         this.provider = provider;
@@ -20,19 +20,21 @@ public class AboutRunner {
 
     public CompletableFuture<String> getAboutText() {
         return authorsAsync(provider.api()).thenApply(authors -> {
-           return new MessageBuilder()
-               .append("Hello! I'm ")
-               .append(provider.api().getYourself().getNicknameMentionTag())
-               .append(" and I'm running on ")
-               .append(provider.bot().internalName() + " v" + provider.bot().version(), MessageDecoration.BOLD, MessageDecoration.UNDERLINE)
-               .append(".")
-               .appendNewLine()
-               .append("I was created by ")
-               .append(Inflections.join(authors.iterator()))
-               .append(" and my code can be found at ")
-               .append(Ref.GITHUB_REPO)
-               .append(".")
-               .getStringBuilder().toString();
+            final var names = authors.stream().map(author -> author.name() + " (@" + author.user().getName() + ")");
+
+            return new MessageBuilder()
+                .append("Hello! I'm ")
+                .append(provider.api().getYourself().getNicknameMentionTag())
+                .append(" and I'm running on ")
+                .append(provider.bot().internalName() + " v" + provider.bot().version(), MessageDecoration.BOLD, MessageDecoration.UNDERLINE)
+                .append(".")
+                .appendNewLine()
+                .append("I was created by ")
+                .append(Inflections.join(names.iterator()))
+                .append(" and my code can be found at ")
+                .append(Ref.GITHUB_REPO)
+                .append(".")
+                .getStringBuilder().toString();
         });
     }
 

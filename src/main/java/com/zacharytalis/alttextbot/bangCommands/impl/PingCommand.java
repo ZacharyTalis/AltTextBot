@@ -10,7 +10,8 @@ import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.entity.user.User;
 
 public class PingCommand extends BaseCommandBody {
-    private record Provider(User user) implements IPingProvider {}
+    private record Provider(User user) implements IPingProvider {
+    }
 
     public static CommandInfo description() {
         return new CommandInfo(
