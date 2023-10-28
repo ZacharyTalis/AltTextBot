@@ -1,25 +1,25 @@
 package com.zacharytalis.alttextbot.bangCommands.registry;
 
+import com.google.common.collect.ImmutableMap;
 import com.zacharytalis.alttextbot.bangCommands.CommandInfo;
 import com.zacharytalis.alttextbot.utils.ReadOnly;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class CommandRegistry implements ICommandRegistry<CommandRegistry>, ReadOnly<ICommandRegistry<CommandRegistry>> {
-    private final Map<String, CommandInfo> commandMap = new LinkedHashMap<>();
-    private final Map<String, CommandInfo> unmodifiableMap = Collections.unmodifiableMap(commandMap);
+    private final Map<String, CommandInfo> commandMap;
 
-    @Override
-    public ICommandRegistry<CommandRegistry> readOnly() {
-        return new ReadOnlyCommandRegistry<>(this);
+    public CommandRegistry() {
+        this.commandMap = new LinkedHashMap<>();
+    }
+
+    private CommandRegistry(Map<String, CommandInfo> map) {
+        this.commandMap = map;
     }
 
     @Override
-    public Map<String, CommandInfo> asUnmodifiableMap() {
-        return unmodifiableMap;
+    public ICommandRegistry<CommandRegistry> readOnly() {
+        return new CommandRegistry(ImmutableMap.copyOf(this.commandMap));
     }
 
     @Override
@@ -41,5 +41,20 @@ public class CommandRegistry implements ICommandRegistry<CommandRegistry>, ReadO
         );
 
         return register(newInfo);
+    }
+
+    @Override
+    public boolean containsPrefix(String prefix) {
+        return this.commandMap.containsKey(prefix);
+    }
+
+    @Override
+    public Optional<CommandInfo> get(String name) {
+        return Optional.ofNullable(this.commandMap.get(name));
+    }
+
+    @Override
+    public Collection<CommandInfo> values() {
+        return Collections.unmodifiableCollection(this.commandMap.values());
     }
 }

@@ -9,8 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface ICommandRegistry<T extends ICommandRegistry<T>> {
-    Map<String, CommandInfo> asUnmodifiableMap();
-
     T register(CommandInfo info);
 
     default T register(CommandInfo info1, CommandInfo info2, CommandInfo... infos) {
@@ -25,27 +23,9 @@ public interface ICommandRegistry<T extends ICommandRegistry<T>> {
 
     T alias(String newName, String oldName);
 
-    default boolean containsPrefix(String prefix) {
-        return asUnmodifiableMap().containsKey(prefix);
-    }
+    boolean containsPrefix(String prefix);
 
-    default boolean containsPrefix(CommandMessage msg) {
-        return msg.getCommandPrefix().map(this::containsPrefix).orElse(false);
-    }
+    Optional<CommandInfo> get(String name);
 
-    default Optional<CommandInfo> get(String name) {
-        return Optional.ofNullable(asUnmodifiableMap().get(name));
-    }
-
-    default Optional<CommandInfo> get(CommandMessage msg) {
-        return msg.getCommandPrefix().flatMap(this::get);
-    }
-
-    default Set<String> prefixes() {
-        return asUnmodifiableMap().keySet();
-    }
-
-    default Collection<CommandInfo> values() {
-        return asUnmodifiableMap().values();
-    }
+    Collection<CommandInfo> values();
 }

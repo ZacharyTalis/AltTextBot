@@ -8,7 +8,6 @@ import com.zacharytalis.alttextbot.bots.DiscordBot;
 import com.zacharytalis.alttextbot.commands.runners.AboutRunner;
 import com.zacharytalis.alttextbot.commands.runners.IAboutProvider;
 import com.zacharytalis.alttextbot.utils.DiscordEntities;
-import com.zacharytalis.alttextbot.utils.MessageAuthorInfo;
 import com.zacharytalis.alttextbot.utils.functions.Functions;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -50,11 +49,11 @@ public class AboutCommand extends BaseCommandBody {
     }
 
     private void handleSendFailure(CommandMessage recv, Throwable t) {
-        var author = new MessageAuthorInfo(recv.getAuthor());
+        var authorInfo = recv.getAuthorInfo();
 
         logger().error(t, "Failed to send about message. {}", recv);
 
-        author.asUser().ifPresent(
+        authorInfo.authorUser().ifPresent(
             user -> new MessageBuilder()
                 .append("Sorry ")
                 .append(user.getMentionTag())

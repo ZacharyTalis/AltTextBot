@@ -6,7 +6,6 @@ import com.zacharytalis.alttextbot.bangCommands.CommandMessage;
 import com.zacharytalis.alttextbot.bots.AltTextBot;
 import com.zacharytalis.alttextbot.services.AltTextContributionService;
 import com.zacharytalis.alttextbot.utils.DiscordEntities;
-import com.zacharytalis.alttextbot.utils.MessageAuthorInfo;
 import org.javacord.api.entity.message.MessageBuilder;
 
 import static com.zacharytalis.alttextbot.utils.functions.Functions.partialConsumer;
@@ -67,11 +66,11 @@ public class AltCommand extends BaseCommandBody {
     }
 
     private void handleDeletionFailure(CommandMessage recv, Throwable t) {
-        var author = new MessageAuthorInfo(recv.getAuthor());
+        var authorInfo = recv.getAuthorInfo();
 
         logger().error(t, "Failed to delete message. {}", recv);
 
-        author.asUser().ifPresent(
+        authorInfo.authorUser().ifPresent(
             user -> new MessageBuilder()
                 .append("Sorry ")
                 .append(user.getMentionTag())
@@ -85,11 +84,11 @@ public class AltCommand extends BaseCommandBody {
     }
 
     private void handleSendFailure(CommandMessage recv, Throwable t) {
-        var author = recv.getAuthorInfo();
+        var authorInfo = recv.getAuthorInfo();
 
         logger().error(t, "Failed to send alt text message. {}", recv);
 
-        author.asUser().ifPresentOrElse(
+        authorInfo.authorUser().ifPresentOrElse(
             user -> new MessageBuilder()
                 .append("Sorry ")
                 .append(user.getMentionTag())
@@ -102,7 +101,7 @@ public class AltCommand extends BaseCommandBody {
 
             () -> new MessageBuilder()
                 .append("Sorry ")
-                .append(author.getDisplayName())
+                .append(authorInfo.messageAuthor().getDisplayName())
                 .append(", I could not send your !alt message! Do I have the right permissions?")
                 .send(recv.getChannel())
         );

@@ -79,11 +79,11 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
 
     @Override
     public String toLoggerString() {
-        final var author = getAuthorInfo();
+        final var authorInfo = getAuthorInfo();
         final var channel = DiscordEntities.getNamedIdentifierOrElse(this::getServerTextChannel, "unknown");
         final var server = DiscordEntities.getNamedIdentifierOrElse(this::getServer, "unknown");
 
-        var arguments = new Object[]{getIdAsString(), author, server, channel};
+        var arguments = new Object[]{getIdAsString(), authorInfo, server, channel};
         var logFormat = "id: {}, {}, server: {}, channel: {}";
 
         if (Ref.currentEnv().isTesting()) {
@@ -422,5 +422,24 @@ public class CommandMessage extends ForwardingObject implements Message, Loggabl
     @Override
     public <T extends MessageAttachableListener & ObjectAttachableListener> void removeListener(Class<T> listenerClass, T listener) {
         delegate.removeMessageAttachableListener(listener);
+    }
+
+    public record MessageAuthorInfo(MessageAuthor messageAuthor) implements Loggable {
+        public boolean isYourself() {
+            return messageAuthor().asUser().map(User::isYourself).orElse(false);
+        }
+
+        public Optional<User> authorUser() { return messageAuthor().asUser(); }
+
+        @Override
+        public String toLoggerString() {
+            return String.format(
+                "MessageAuthor: %s, is_webhook: %s, is_bot: %s, is_self: %s",
+                messageAuthor().getDiscriminatedName(),
+                toYesNo(messageAuthor().isWebhook()),
+                toYesNo(messageAuthor().isBotUser()),
+                toYesNo(isYourself())
+            );
+        }
     }
 }
