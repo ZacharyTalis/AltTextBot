@@ -26,7 +26,9 @@ public class BangDispatch implements ICommandDispatch {
     }
 
     private Optional<CommandBody> findCommand(UserCommandMessage.Bang msg) {
-        return this.registry.get(msg.commandMessage()).map(info -> info.instantiate(msg.bot()));
+        final var prefixOpt = msg.commandMessage().getCommandPrefix();
+
+        return prefixOpt.flatMap(this.registry::get).map(info -> info.instantiate(msg.bot()));
     }
 
     @Override
